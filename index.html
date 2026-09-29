@@ -3,10 +3,447 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Pick-assist</title>
+  <!--
+    외부로 나가는 요청을 브라우저 차원에서 막는다.
+    입력 내용 외부 전송 금지 원칙의 안전장치이므로 느슨하게 만들지 말 것.
+  -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f7f3ec" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#151412" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="둘 중 하나, 망설임 없이 골라 드립니다. The Spoon Lab의 Pick-assist.">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cellipse cx='32' cy='18' rx='12' ry='15' fill='%23e8643a'/%3E%3Crect x='29' y='30' width='6' height='30' rx='3' fill='%23e8643a'/%3E%3C/svg%3E">
+  <title>Pick-assist — 둘 중 하나, 대신 골라 드립니다</title>
+
+  <style>
+    :root {
+      --bg: #f7f3ec;
+      --surface: #ffffff;
+      --text: #1d1b18;
+      --muted: #6f6a62;
+      --line: #e4ddd2;
+      --accent: #e8643a;
+      --accent-text: #ffffff;
+      --accent-soft: #fbe3d9;
+      --warn-bg: #fff6d9;
+      --warn-line: #ecd48a;
+      --care-bg: #e8f1fb;
+      --care-line: #b7cfeb;
+      --shadow: 0 10px 30px rgba(60, 40, 20, 0.08);
+      --radius: 18px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #151412;
+        --surface: #201e1b;
+        --text: #f3eee6;
+        --muted: #a39d93;
+        --line: #36322d;
+        --accent: #ff8052;
+        --accent-text: #1a0f0a;
+        --accent-soft: #3a2519;
+        --warn-bg: #2f2a18;
+        --warn-line: #5e5227;
+        --care-bg: #17242f;
+        --care-line: #2f4a63;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard",
+        "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.5;
+      word-break: keep-all;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: calc(28px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+        calc(28px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: var(--muted);
+    }
+
+    .brand svg {
+      width: 18px;
+      height: 18px;
+      flex: none;
+    }
+
+    h1 {
+      margin: 18px 0 22px;
+      font-size: clamp(1.6rem, 7vw, 2.1rem);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .input {
+      width: 100%;
+      min-height: 56px;
+      padding: 0 16px;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-size: 1.1rem;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .input::placeholder {
+      color: var(--muted);
+      opacity: 0.8;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    button {
+      font: inherit;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: default;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .primary {
+      min-height: 56px;
+      padding: 0 22px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      transition: transform 0.08s ease, opacity 0.15s ease;
+    }
+
+    .primary:active {
+      transform: scale(0.98);
+    }
+
+    .primary:disabled {
+      opacity: 0.6;
+    }
+
+    .notice {
+      margin: 14px 2px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .safety {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border: 1px solid var(--warn-line);
+      border-radius: var(--radius);
+      background: var(--warn-bg);
+      font-weight: 600;
+    }
+
+    .safety.is-care {
+      border-color: var(--care-line);
+      background: var(--care-bg);
+    }
+
+    .safety p {
+      margin: 0;
+    }
+
+    .call-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      margin-top: 12px;
+      padding: 0 18px;
+      border-radius: 999px;
+      background: var(--text);
+      color: var(--bg);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .result {
+      margin-top: 22px;
+      padding: 26px 22px 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .result-label {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .picked {
+      margin: 6px 0 4px;
+      font-size: clamp(2.4rem, 13vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--accent);
+      overflow-wrap: anywhere;
+    }
+
+    .result.is-rolling .picked {
+      color: var(--muted);
+      filter: blur(1px);
+    }
+
+    .result.is-revealed .picked {
+      animation: pop 0.28s cubic-bezier(0.2, 1.4, 0.4, 1);
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0.82);
+        opacity: 0.4;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .line {
+      margin: 0;
+      font-size: 1.12rem;
+      font-weight: 700;
+      min-height: 1.5em;
+    }
+
+    .reactions {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .chip {
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .chip:active {
+      background: var(--accent-soft);
+    }
+
+    .reply {
+      margin: 18px 0 0;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      font-weight: 700;
+    }
+
+    .again {
+      display: flex;
+      gap: 8px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--line);
+    }
+
+    .again button {
+      flex: 1;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .again button:disabled {
+      opacity: 0.5;
+    }
+
+    .footer {
+      margin-top: auto;
+      padding-top: 40px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    .footer p {
+      margin: 2px 0;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (min-width: 600px) {
+      .app {
+        padding-top: calc(64px + env(safe-area-inset-top));
+      }
+
+      .form {
+        flex-direction: row;
+      }
+
+      .input {
+        flex: 1;
+      }
+
+      .primary {
+        flex: none;
+        min-width: 120px;
+      }
+
+      .result {
+        padding: 34px 30px 26px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .result.is-revealed .picked {
+        animation: none;
+      }
+
+      .primary {
+        transition: none;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Pick-assist</h1>
+  <main class="app">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <ellipse cx="32" cy="18" rx="12" ry="15" fill="currentColor"></ellipse>
+        <rect x="29" y="30" width="6" height="30" rx="3" fill="currentColor"></rect>
+      </svg>
+      <span>Pick-assist</span>
+    </div>
+
+    <h1>둘 중에 망설여지면,<br>제가 떠먹여 드립니다.</h1>
+
+    <form id="pick-form" class="form" autocomplete="off" novalidate>
+      <label for="pick-input" class="visually-hidden">두 선택지 입력</label>
+      <input
+        id="pick-input"
+        class="input"
+        type="text"
+        placeholder="짜장 vs 짬뽕"
+        maxlength="120"
+        enterkeyhint="go"
+        autocapitalize="off"
+        autocorrect="off"
+        spellcheck="false"
+      >
+      <button id="pick-button" class="primary" type="submit">골라줘</button>
+    </form>
+
+    <p id="notice" class="notice" role="status" hidden></p>
+
+    <div id="safety" class="safety" role="alert" hidden>
+      <p id="safety-message"></p>
+      <a id="safety-call" class="call-link" href="tel:109" hidden>109에 전화하기</a>
+    </div>
+
+    <section id="result" class="result" aria-live="polite" hidden>
+      <p class="result-label">골랐습니다</p>
+      <p id="picked" class="picked"></p>
+      <p id="line" class="line"></p>
+
+      <div id="reactions" class="reactions" hidden>
+        <button id="react-like" class="chip" type="button">좋아</button>
+        <button id="react-other" class="chip" type="button">아… 다른 거</button>
+      </div>
+      <p id="reply" class="reply" hidden></p>
+
+      <div id="again" class="again" hidden>
+        <button id="again-same" type="button">한 번 더</button>
+        <button id="again-new" type="button">새로 입력</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>먹고 싶으면 먹고, 싫으면 고개를 돌리세요.</p>
+      <p>입력한 내용은 이 기기 밖으로 나가지 않습니다.</p>
+      <p>The Spoon Lab</p>
+    </footer>
+  </main>
 
   <!--
     pick-core: DOM을 건드리지 않는 순수 로직.
@@ -353,6 +790,218 @@
       fillTemplate: fillTemplate,
       pickLineIndex: pickLineIndex
     };
+  })();
+  </script>
+
+  <!-- 화면: DOM 연결과 연출만 담당한다. 결과는 PickCore.decide가 정한다. -->
+  <script>
+  (function () {
+    "use strict";
+
+    var ROLL_DURATION_MS = 700;
+    var ROLL_STEP_MS = 90;
+    var REDUCED_ROLL_DURATION_MS = 500;
+    var CRYPTO_ERROR_MESSAGE = "이 브라우저에서는 공정한 추첨을 할 수 없어요. 최신 브라우저로 열어 주세요.";
+
+    var form = document.getElementById("pick-form");
+    var input = document.getElementById("pick-input");
+    var pickButton = document.getElementById("pick-button");
+    var notice = document.getElementById("notice");
+    var safety = document.getElementById("safety");
+    var safetyMessage = document.getElementById("safety-message");
+    var safetyCall = document.getElementById("safety-call");
+    var result = document.getElementById("result");
+    var pickedText = document.getElementById("picked");
+    var lineText = document.getElementById("line");
+    var reactions = document.getElementById("reactions");
+    var reactLike = document.getElementById("react-like");
+    var reactOther = document.getElementById("react-other");
+    var reply = document.getElementById("reply");
+    var again = document.getElementById("again");
+    var againSame = document.getElementById("again-same");
+    var againNew = document.getElementById("again-new");
+
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var coarsePointer = window.matchMedia("(pointer: coarse)");
+
+    var state = {
+      rolling: false,
+      lastInput: "",
+      lastDecision: null,
+      lastLineIndex: -1,
+      lastLikeIndex: -1
+    };
+
+    function clearOutputs() {
+      notice.hidden = true;
+      safety.hidden = true;
+      safetyCall.hidden = true;
+      safety.classList.remove("is-care");
+      result.hidden = true;
+      reply.hidden = true;
+    }
+
+    function showNotice(message) {
+      notice.textContent = message;
+      notice.hidden = false;
+    }
+
+    function showSafety(decision) {
+      safetyMessage.textContent = decision.message;
+
+      var isSelfHarm = decision.kind === "selfHarm";
+      safetyCall.hidden = !isSelfHarm;
+      safety.classList.toggle("is-care", isSelfHarm);
+      safety.hidden = false;
+    }
+
+    function setBusy(busy) {
+      state.rolling = busy;
+      pickButton.disabled = busy;
+      againSame.disabled = busy;
+      againNew.disabled = busy;
+    }
+
+    function run(rawInput) {
+      if (state.rolling) {
+        return;
+      }
+
+      clearOutputs();
+
+      var decision;
+      try {
+        decision = PickCore.decide(rawInput);
+      } catch (error) {
+        showNotice(CRYPTO_ERROR_MESSAGE);
+        return;
+      }
+
+      if (decision.status === "safety") {
+        showSafety(decision);
+        return;
+      }
+
+      if (decision.status === "invalid") {
+        showNotice(decision.message);
+        return;
+      }
+
+      state.lastInput = rawInput;
+      state.lastDecision = decision;
+
+      if (coarsePointer.matches) {
+        // 모바일 키보드를 내려서 결과가 가려지지 않게 한다.
+        input.blur();
+      }
+
+      roll(decision);
+    }
+
+    // 짧은 연출. 결과는 이미 정해져 있고, 연출은 보여주기만 한다.
+    function roll(decision) {
+      setBusy(true);
+
+      result.classList.remove("is-revealed");
+      result.classList.add("is-rolling");
+      reactions.hidden = true;
+      again.hidden = true;
+      lineText.textContent = "고르는 중…";
+      pickedText.textContent = decision.choices[0];
+      result.hidden = false;
+      result.scrollIntoView({ block: "nearest", behavior: "smooth" });
+
+      if (reducedMotion.matches) {
+        pickedText.textContent = "…";
+        window.setTimeout(function () {
+          reveal(decision);
+        }, REDUCED_ROLL_DURATION_MS);
+        return;
+      }
+
+      var step = 0;
+      var flicker = window.setInterval(function () {
+        step += 1;
+        pickedText.textContent = decision.choices[step % 2];
+      }, ROLL_STEP_MS);
+
+      window.setTimeout(function () {
+        window.clearInterval(flicker);
+        reveal(decision);
+      }, ROLL_DURATION_MS);
+    }
+
+    function reveal(decision) {
+      var lines = PickCore.RESULT_LINES;
+      var lineIndex;
+
+      try {
+        lineIndex = PickCore.pickLineIndex(lines.length, null, state.lastLineIndex);
+      } catch (error) {
+        lineIndex = 0;
+      }
+      state.lastLineIndex = lineIndex;
+
+      pickedText.textContent = decision.picked;
+      lineText.textContent = PickCore.fillTemplate(lines[lineIndex], decision);
+
+      result.classList.remove("is-rolling");
+      // 애니메이션을 다시 걸기 위해 레이아웃을 한 번 읽는다.
+      void result.offsetWidth;
+      result.classList.add("is-revealed");
+
+      reactions.hidden = false;
+      again.hidden = false;
+      setBusy(false);
+    }
+
+    function showReply(text) {
+      reactions.hidden = true;
+      reply.textContent = text;
+      reply.hidden = false;
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      run(input.value);
+    });
+
+    input.addEventListener("input", function () {
+      notice.hidden = true;
+    });
+
+    reactLike.addEventListener("click", function () {
+      var lines = PickCore.LIKE_LINES;
+      var index;
+
+      try {
+        index = PickCore.pickLineIndex(lines.length, null, state.lastLikeIndex);
+      } catch (error) {
+        index = 0;
+      }
+      state.lastLikeIndex = index;
+
+      showReply(lines[index]);
+    });
+
+    // "다른 거"는 재추첨하지 않는다. 이미 마음이 정해져 있었다는 걸 짚어 줄 뿐이다.
+    reactOther.addEventListener("click", function () {
+      if (!state.lastDecision) {
+        return;
+      }
+      showReply(PickCore.fillTemplate(PickCore.OTHER_LINE, state.lastDecision));
+    });
+
+    againSame.addEventListener("click", function () {
+      run(state.lastInput);
+    });
+
+    againNew.addEventListener("click", function () {
+      clearOutputs();
+      input.value = "";
+      state.lastDecision = null;
+      input.focus();
+    });
   })();
   </script>
 </body>
