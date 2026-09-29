@@ -2,10 +2,11 @@
 
 세션 사이 인수인계 기록. 새 세션은 대화 기록을 모르므로 이어서 할 정보는 여기에 남긴다.
 
-## 현재 상태 (마지막 갱신: 2026-09-29, 4차)
+## 현재 상태 (마지막 갱신: 2026-09-29, 5차)
 
-- 작업 branch `claude/clever-maxwell-tgq5la`로 Pull Request(PR) https://github.com/rundope/Pick-assist/pull/1 이 열려 있다. merge는 사용자가 한다.
-- 원격 `main`에는 빈 초기 commit 하나만 있다. Pull Request(PR)가 merge되어야 앱이 `main`에 들어간다.
+- Pull Request(PR) https://github.com/rundope/Pick-assist/pull/1 은 merge되었다 (`main` = `851d3d6`). merge된 Pull Request(PR)는 다시 쓰지 않는다. 새 작업은 최신 `main`에서 branch를 새로 시작해 새 Pull Request(PR)로 올린다.
+- GitHub Pages가 `main` / root에서 켜져 있고, 첫 배포("pages build and deployment")가 성공했다. 주소: https://rundope.github.io/Pick-assist/
+- 클라우드 세션의 네트워크 정책이 `rundope.github.io`를 막아서, 세션 안에서는 배포된 사이트를 직접 열 수 없다. 배포 확인은 GitHub Actions의 Pages 배포 기록으로 한다. 직접 열어 보려면 환경 설정의 Network access에 이 도메인을 추가해야 한다.
 - 테스트는 38개이고 모두 통과한다 (`node --test tests/*.test.js`).
 - 회사 이름은 Spoonbills다. 브랜드 톤 문장 "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유"가 첫 화면 제목(슬로건)이다. footer는 "이 법정은 철저한 비공개 재판입니다. 사건도 판결도 이 기기 밖으로 새지 않아요."와 "Spoonbills" 두 줄이다. 제목 아래 "두 선택지를 올리면, 공정하게 판결합니다."는 사용자가 유지하기로 했다.
 - 입력 예시(placeholder)와 README 예시는 `Mercedes-Benz` vs `BMW`다.
@@ -24,9 +25,8 @@
 
 ### 다음에 할 일 (우선순위 순)
 
-1. 사용자가 Pull Request(PR)를 merge하면 Settings → Pages에서 `main` / root를 켜고 https://rundope.github.io/Pick-assist/ 가 열리는지 확인한다.
-2. 실제 iPhone Safari와 iPad에서 확인한다. iOS에는 한글 명조 폰트가 기본으로 없어서 제목이 고딕으로 보일 수 있다. 명조가 꼭 필요하면 폰트 파일을 저장소에 직접 넣는 방법을 검토한다 (외부 폰트 CDN은 원칙상 쓰지 않는다).
-3. 공유용 미리보기(Open Graph 이미지·설명)를 넣는다. 링크를 메신저에 붙였을 때 로고와 슬로건이 보이게 한다.
+1. 실제 iPhone Safari와 iPad에서 확인한다. iOS에는 한글 명조 폰트가 기본으로 없어서 제목이 고딕으로 보일 수 있다. 명조가 꼭 필요하면 폰트 파일을 저장소에 직접 넣는 방법을 검토한다 (외부 폰트 CDN은 원칙상 쓰지 않는다).
+2. 공유용 미리보기(Open Graph 이미지·설명)를 넣는다. 링크를 메신저에 붙였을 때 로고와 슬로건이 보이게 한다.
 
 ### 주의할 점
 
