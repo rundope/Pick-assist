@@ -2,7 +2,36 @@
 
 세션 사이 인수인계 기록. 새 세션은 대화 기록을 모르므로 이어서 할 정보는 여기에 남긴다.
 
-## 마지막 갱신: 2026-09-29 (2차: 재판정 디자인)
+## 현재 상태 (마지막 갱신: 2026-09-29, 3차)
+
+- 작업 branch `claude/clever-maxwell-tgq5la`로 Pull Request(PR) https://github.com/rundope/Pick-assist/pull/1 이 열려 있다. merge는 사용자가 한다.
+- 원격 `main`에는 빈 초기 commit 하나만 있다. Pull Request(PR)가 merge되어야 앱이 `main`에 들어간다.
+- 테스트는 38개이고 모두 통과한다 (`node --test tests/*.test.js`).
+- 회사 이름은 Spoonbills다. 브랜드 톤 문장은 "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유"이고, 화면 footer에도 쓰인다.
+
+### 3차에 한 일
+
+- footer 첫 줄을 브랜드 톤 문장으로 바꿨다.
+- README의 스크린샷 자리를 실제 화면(라이트·다크, 390px)으로 채웠다 (`docs/`).
+- 건강·안전 키워드를 보강했다 (라식·라섹, 타이레놀, 졸음운전, 헬멧, 손목 긋기, 생을 마감, 과다복용 등). 오탐 반례(마약떡볶이, 대마도, 숙제 끝내버릴까 등)도 테스트에 넣었다.
+
+### 다음에 할 일 (우선순위 순)
+
+1. 사용자가 Pull Request(PR)를 merge하면 Settings → Pages에서 `main` / root를 켜고 https://rundope.github.io/Pick-assist/ 가 열리는지 확인한다.
+2. 실제 iPhone Safari와 iPad에서 확인한다. iOS에는 한글 명조 폰트가 기본으로 없어서 제목이 고딕으로 보일 수 있다. 명조가 꼭 필요하면 폰트 파일을 저장소에 직접 넣는 방법을 검토한다 (외부 폰트 CDN은 원칙상 쓰지 않는다).
+3. 공유용 미리보기(Open Graph 이미지·설명)를 넣는다. 링크를 메신저에 붙였을 때 로고와 슬로건이 보이게 한다.
+
+### 주의할 점
+
+- `.claude/skills/`의 스킬은 세션이 시작되거나 저장소가 등록될 때 읽힌다. 1차에는 세션 도중에 만들어서 `wrap-up`을 호출하지 못했지만, 3차 시점에는 `wrap-up`·`start-work`가 스킬 목록에 등록된 것을 확인했다.
+- 테스트는 `node --test tests/`가 아니라 `node --test tests/*.test.js`로 돌린다. Node.js 22는 디렉터리 인자를 파일 경로로 해석한다.
+- `index.html`의 `<script id="pick-core">`와 `var PickCore`는 테스트가 직접 읽는다. 이름을 바꾸면 테스트가 깨진다.
+- 키워드 매칭은 공백을 지우고 비교한다. 짧은 키워드는 일상어와 겹치기 쉽다 ("주사"→"주사위", "약"→"약속", "유서"→"유서 깊은"). 새 키워드를 넣으면 `EVERYDAY_INPUTS` 테스트에 반례도 넣는다.
+- 정규식 lookbehind는 구형 Safari에서 스크립트 전체를 멈추게 하므로 쓰지 않는다 (테스트로 막아 두었다).
+- 로고는 사용자가 준 PNG를 potrace로 벡터화한 path다. 새 로고를 받으면 같은 방식으로 SVG path를 만들어 헤더(`.brand .logo`)와 favicon data URI를 함께 바꾼다.
+- README 스크린샷(`docs/screenshot-*.png`)은 화면을 바꾸면 다시 찍는다 (Playwright, 390px, deviceScaleFactor 2, fullPage).
+
+## 2차 기록 (2026-09-29): 재판정 디자인
 
 ### 이번에 한 일
 
@@ -19,7 +48,7 @@
 
 - 없음. 브랜드 톤 문장은 "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유"로 확정되어 CLAUDE.md와 README에 반영했다.
 
-## 1차 기록 (2026-09-29)
+## 1차 기록 (2026-09-29): MVP
 
 ### 한 일
 
@@ -35,23 +64,9 @@
 - `tests/`에 Node.js 내장 테스트 29개를 추가했다. 모두 통과한다.
 - LICENSE(MIT), README(영어 → 한국어)를 추가했다.
 
-### 현재 상태
+### 당시 상태
 
 - 모든 기능이 동작하고 테스트 29개가 통과한다 (`node --test tests/*.test.js`).
 - Playwright로 390px·1280px, 라이트·다크에서 레이아웃과 동작을 확인했고 콘솔 오류는 없었다.
 - 실제 iPhone·iPad Safari에서는 아직 확인하지 않았다.
 - GitHub Pages는 아직 켜지 않았다. 저장소 Settings → Pages에서 `main` / root를 선택해야 한다.
-
-### 다음에 할 일 (우선순위 순)
-
-1. push 권한을 해결한다. Claude GitHub App이 `rundope/Pick-assist`에 설치되어 있지 않아 push가 403으로 막혀 있다. 해결되면 `main`(빈 초기 commit)을 먼저 push해서 기본 branch로 만들고, 작업 branch를 push한 뒤 Pull Request(PR)를 만든다. 그다음 Settings → Pages에서 `main` / root를 켠다.
-2. 실제 iPhone Safari와 iPad에서 확인하고, README의 스크린샷 자리를 채운다. iOS에는 한글 명조 폰트가 기본으로 없어서 제목이 고딕으로 보일 수 있다.
-3. 건강·안전 키워드의 오탐·미탐을 보강한다.
-
-### 주의할 점
-
-- `.claude/skills/`의 스킬은 세션이 시작될 때 등록된다. 오늘은 세션 도중에 만들어서 `wrap-up`을 스킬로 호출하지 못했고, `SKILL.md` 절차를 수동으로 따랐다. 다음 세션부터는 "퇴근"/"출근"으로 바로 호출되는지 확인할 것.
-- 테스트는 `node --test tests/`가 아니라 `node --test tests/*.test.js`로 돌린다. Node.js 22는 디렉터리 인자를 파일 경로로 해석한다.
-- `index.html`의 `<script id="pick-core">`와 `var PickCore`는 테스트가 직접 읽는다. 이름을 바꾸면 테스트가 깨진다.
-- 키워드 매칭은 공백을 지우고 비교한다. 짧은 키워드는 일상어와 겹치기 쉽다 ("주사"→"주사위", "약"→"약속", "유서"→"유서 깊은"). 새 키워드를 넣으면 `EVERYDAY_INPUTS` 테스트에 반례도 넣는다.
-- 정규식 lookbehind는 구형 Safari에서 스크립트 전체를 멈추게 하므로 쓰지 않는다 (테스트로 막아 두었다).
