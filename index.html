@@ -1,0 +1,1416 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!--
+    외부로 나가는 요청을 브라우저 차원에서 막는다.
+    입력 내용 외부 전송 금지 원칙의 안전장치이므로 느슨하게 만들지 말 것.
+  -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f3eee3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1422" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유. 두 선택지 중 하나를 공정하게 판결해 드립니다. Spoonbills의 Pick-assist.">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 363 320'%3E%3Cpath fill='%231b2a47' fill-rule='evenodd' d='M142.4 307.6C140.9 303.7 142.3 302.5 150.5 301.3C190.2 295.1 211.6 285.8 231 266.1C246.6 250.3 252.8 233.1 250 213C247.8 197.1 241.3 183.9 227.4 167.5C218.1 156.4 216.2 152.1 218 146.5C218.6 144.6 220.7 141.7 222.6 140C230.7 133 242 137 271 157.4C285.3 167.5 305.7 187.5 313 198.5C322.9 213.2 328.8 217.8 340.2 219.4L344.9 220.1L345.5 216.7C346.9 209.3 341.9 202.8 329 194.9C313 185.2 292.1 168.7 271.6 149.6C257.4 136.3 248.7 125.7 244.7 117.1C239.3 105.2 233.8 100.2 222.9 97.4C211.2 94.4 197.7 99.1 191.3 108.4C180.5 124.2 183.7 141 202.4 165.7C213.2 180 214.7 182.5 216.6 190C218.6 197.9 217.8 205.3 214.2 212C210.8 218.2 182.4 249.6 164.1 267.2C148.7 282 138.2 290 126.4 295.8C112.8 302.6 109 303.5 95 303.5C79.4 303.5 73.3 301.4 65.4 293.6C46.2 274.3 57.4 243.2 92 220.1C111.9 206.8 133.6 198 156.4 194C162.8 192.9 188 192.8 191.8 193.8C196.8 195.3 193.6 196.5 183.1 197.2C163.7 198.4 144.3 204.5 124 215.8C90.6 234.3 66.8 264.1 71.9 281C75.9 294.4 95.6 296.8 117.5 286.5C128.6 281.4 141.4 271.6 156 257C172.2 240.9 202.8 207.2 205.2 202.7C207.5 198.6 207.4 191.6 205 186.2C203.9 183.9 200.5 178.6 197.4 174.4C188.5 162.6 182.2 151.3 179.3 142.3C174 125.1 177.7 109 189.4 98.3C204.4 84.5 228.5 85 242.9 99.2C245.2 101.6 248.9 107.1 251.4 112.4C261.3 132.6 294.8 165.2 328.5 187.5C336.3 192.6 344.2 198.6 346.2 200.8C352.8 208.1 353.4 219.5 347.5 225C345.3 227.1 344.6 227.2 343 226.2C341.9 225.5 340.2 225 339.2 225C335.5 225 327.3 222 322.7 218.9C319.4 216.8 315.6 212.5 310.8 205.6C298.5 188.2 283.1 173.9 261.5 159.7C241.1 146.4 231.7 142.5 227.5 146C224.3 148.7 225.7 152.3 233.8 162.1C248.1 179.2 253.5 189.2 257.1 204.7C262.5 227.9 256.5 250.5 240.1 269.1C228.8 281.8 206.7 295.3 186.2 302C168.7 307.6 143.6 310.8 142.4 307.6ZM53.4 225.7C37.2 213.7 23.5 192 17.8 169.2C14.6 156.1 14.6 130.3 17.9 117C25.2 87.4 42 62.1 67 43.1C106.6 12.9 154.4 5.2 198 22.1C214.5 28.5 234.5 42.6 244.7 55C255.9 68.6 264.9 85.5 262.2 88.2C259.9 90.5 256 87.8 246.9 77.4C234.2 63 225.3 54.9 213.9 47.4C195.6 35.3 179.6 30.2 158 29.3C109.5 27.3 64.3 54.4 42.5 98.5C21.2 141.5 28 187.8 60.3 219.2C67.1 225.9 67.8 229.3 62.4 229.8C60.1 230 57.9 229.1 53.4 225.7ZM221.1 123.3C216.6 119.6 219.3 112 225 112C228.5 112 231 114.8 231 118.7C231 123.9 225.1 126.6 221.1 123.3Z'/%3E%3C/svg%3E">
+  <title>Pick-assist — 망설이지 마세요</title>
+
+  <style>
+    /* 콘셉트: 판결을 내리는 법정. 남색 잉크(로고 색), 양피지, 황동, 판결 도장. */
+    :root {
+      --bg: #f3eee3;
+      --surface: #fffdf8;
+      --text: #1b2a47;
+      --muted: #69708a;
+      --line: #d8cdb7;
+      --gold: #a07a2c;
+      --gold-soft: #efe3c6;
+      --button: #1b2a47;
+      --button-text: #fdf8ec;
+      --verdict: #8c1d2c;
+      --warn-bg: #fff5d8;
+      --warn-line: #e5cc85;
+      --care-bg: #e7eef8;
+      --care-line: #b3c6e0;
+      --shadow: 0 14px 34px rgba(27, 42, 71, 0.12);
+      --radius: 14px;
+      --logo: #1b2a47;
+      --serif: "Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", "Batang", "Times New Roman", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR",
+        "Malgun Gothic", system-ui, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0e1422;
+        --surface: #161e31;
+        --text: #ece5d3;
+        --muted: #9aa3ba;
+        --line: #2b3652;
+        --gold: #d8b261;
+        --gold-soft: #2c2a25;
+        --button: #d8b261;
+        --button-text: #10172a;
+        --verdict: #f0c96a;
+        --warn-bg: #2d2817;
+        --warn-line: #5d5026;
+        --care-bg: #15243a;
+        --care-line: #2f4a6b;
+        --shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+        --logo: #e6dcc3;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.5;
+      word-break: keep-all;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto;
+      padding: calc(28px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+        calc(24px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    /* ── 머리: 법정 문장(紋章)처럼 가운데 정렬 ── */
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+    }
+
+    .brand .logo {
+      width: 64px;
+      height: auto;
+      color: var(--logo);
+    }
+
+    .wordmark {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .house {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      color: var(--gold);
+    }
+
+    .rule {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin: 20px 0 18px;
+      color: var(--gold);
+    }
+
+    .rule::before,
+    .rule::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .rule svg {
+      width: 22px;
+      height: 22px;
+      flex: none;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(1.7rem, 7.4vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      text-align: center;
+    }
+
+    .slogan-main,
+    .slogan-sub {
+      display: block;
+    }
+
+    .slogan-sub {
+      margin-top: 6px;
+      font-size: 0.62em;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      margin: 10px 0 24px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    /* ── 사건 접수: 두 선택지 ── */
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .fields {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .versus {
+      position: relative;
+      z-index: 1;
+      align-self: center;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      margin: -8px 0;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      background: var(--bg);
+      color: var(--gold);
+      font-family: var(--serif);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .input {
+      width: 100%;
+      min-height: 58px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-size: 1.12rem;
+      text-align: center;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .input::placeholder {
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px var(--gold-soft);
+    }
+
+    button {
+      font: inherit;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: default;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    .primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 58px;
+      padding: 0 22px;
+      border: 0;
+      border-radius: var(--radius);
+      background: var(--button);
+      color: var(--button-text);
+      font-size: 1.12rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      transition: transform 0.08s ease, opacity 0.15s ease;
+    }
+
+    .primary svg {
+      width: 22px;
+      height: 22px;
+      flex: none;
+    }
+
+    .primary:active {
+      transform: scale(0.98);
+    }
+
+    .primary:disabled {
+      opacity: 0.65;
+    }
+
+    .notice {
+      margin: 14px 2px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .safety {
+      margin-top: 20px;
+      padding: 16px 18px;
+      border: 1px solid var(--warn-line);
+      border-radius: var(--radius);
+      background: var(--warn-bg);
+      font-weight: 600;
+    }
+
+    .safety.is-care {
+      border-color: var(--care-line);
+      background: var(--care-bg);
+    }
+
+    .safety p {
+      margin: 0;
+    }
+
+    .call-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      margin-top: 12px;
+      padding: 0 18px;
+      border-radius: 999px;
+      background: var(--text);
+      color: var(--bg);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    /* ── 판결문 ── */
+
+    .result {
+      position: relative;
+      margin-top: 24px;
+      padding: 22px 20px 20px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    /* 문서 테두리처럼 안쪽에 한 줄 더 */
+    .result::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 1px solid var(--gold-soft);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+
+    .result-head {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 0;
+      color: var(--gold);
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.5em;
+      text-indent: 0.5em;
+    }
+
+    .gavel {
+      width: 30px;
+      height: 30px;
+      flex: none;
+      transform-origin: 80% 80%;
+    }
+
+    .picked {
+      margin: 14px 0 8px;
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 13vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--verdict);
+      overflow-wrap: anywhere;
+    }
+
+    .line {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      font-weight: 700;
+      min-height: 1.5em;
+    }
+
+    .verdict-date {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+    }
+
+    .result.is-rolling .picked {
+      color: var(--muted);
+      filter: blur(1px);
+    }
+
+    .result.is-rolling .gavel {
+      animation: raise 0.35s ease-in-out infinite alternate;
+    }
+
+    .result.is-revealed .gavel {
+      animation: strike 0.3s cubic-bezier(0.3, 1.6, 0.5, 1);
+    }
+
+    .result.is-revealed .picked {
+      animation: stamp 0.32s cubic-bezier(0.2, 1.3, 0.4, 1);
+    }
+
+    .result.is-revealed {
+      animation: thud 0.22s ease-out;
+    }
+
+    @keyframes raise {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(-28deg);
+      }
+    }
+
+    @keyframes strike {
+      from {
+        transform: rotate(-35deg);
+      }
+      to {
+        transform: rotate(0deg);
+      }
+    }
+
+    @keyframes stamp {
+      from {
+        transform: scale(1.35);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes thud {
+      0% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(3px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .reactions {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .chip {
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .chip:active {
+      background: var(--gold-soft);
+    }
+
+    .reply {
+      margin: 18px 0 0;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--gold-soft);
+      font-weight: 700;
+    }
+
+    .again {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--line);
+    }
+
+    .again button {
+      flex: 1;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .again button:disabled {
+      opacity: 0.5;
+    }
+
+    .footer {
+      margin-top: auto;
+      padding-top: 40px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    .footer p {
+      margin: 2px 0;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (min-width: 600px) {
+      .app {
+        padding-top: calc(56px + env(safe-area-inset-top));
+      }
+
+      .fields {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .fields .input {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .fields {
+        gap: 10px;
+      }
+
+      .versus {
+        margin: 0;
+      }
+
+      .result {
+        padding: 30px 30px 24px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .result.is-rolling .gavel,
+      .result.is-revealed .gavel,
+      .result.is-revealed .picked,
+      .result.is-revealed {
+        animation: none;
+      }
+
+      .primary {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="brand">
+      <!-- Spoonbills 로고 (저장소에 받은 이미지를 벡터로 옮김). 색은 테마를 따른다. -->
+      <svg class="logo" viewBox="0 0 363 320" aria-hidden="true">
+        <path fill="currentColor" fill-rule="evenodd" d="M142.4 307.6C140.9 303.7 142.3 302.5 150.5 301.3C190.2 295.1 211.6 285.8 231 266.1C246.6 250.3 252.8 233.1 250 213C247.8 197.1 241.3 183.9 227.4 167.5C218.1 156.4 216.2 152.1 218 146.5C218.6 144.6 220.7 141.7 222.6 140C230.7 133 242 137 271 157.4C285.3 167.5 305.7 187.5 313 198.5C322.9 213.2 328.8 217.8 340.2 219.4L344.9 220.1L345.5 216.7C346.9 209.3 341.9 202.8 329 194.9C313 185.2 292.1 168.7 271.6 149.6C257.4 136.3 248.7 125.7 244.7 117.1C239.3 105.2 233.8 100.2 222.9 97.4C211.2 94.4 197.7 99.1 191.3 108.4C180.5 124.2 183.7 141 202.4 165.7C213.2 180 214.7 182.5 216.6 190C218.6 197.9 217.8 205.3 214.2 212C210.8 218.2 182.4 249.6 164.1 267.2C148.7 282 138.2 290 126.4 295.8C112.8 302.6 109 303.5 95 303.5C79.4 303.5 73.3 301.4 65.4 293.6C46.2 274.3 57.4 243.2 92 220.1C111.9 206.8 133.6 198 156.4 194C162.8 192.9 188 192.8 191.8 193.8C196.8 195.3 193.6 196.5 183.1 197.2C163.7 198.4 144.3 204.5 124 215.8C90.6 234.3 66.8 264.1 71.9 281C75.9 294.4 95.6 296.8 117.5 286.5C128.6 281.4 141.4 271.6 156 257C172.2 240.9 202.8 207.2 205.2 202.7C207.5 198.6 207.4 191.6 205 186.2C203.9 183.9 200.5 178.6 197.4 174.4C188.5 162.6 182.2 151.3 179.3 142.3C174 125.1 177.7 109 189.4 98.3C204.4 84.5 228.5 85 242.9 99.2C245.2 101.6 248.9 107.1 251.4 112.4C261.3 132.6 294.8 165.2 328.5 187.5C336.3 192.6 344.2 198.6 346.2 200.8C352.8 208.1 353.4 219.5 347.5 225C345.3 227.1 344.6 227.2 343 226.2C341.9 225.5 340.2 225 339.2 225C335.5 225 327.3 222 322.7 218.9C319.4 216.8 315.6 212.5 310.8 205.6C298.5 188.2 283.1 173.9 261.5 159.7C241.1 146.4 231.7 142.5 227.5 146C224.3 148.7 225.7 152.3 233.8 162.1C248.1 179.2 253.5 189.2 257.1 204.7C262.5 227.9 256.5 250.5 240.1 269.1C228.8 281.8 206.7 295.3 186.2 302C168.7 307.6 143.6 310.8 142.4 307.6ZM53.4 225.7C37.2 213.7 23.5 192 17.8 169.2C14.6 156.1 14.6 130.3 17.9 117C25.2 87.4 42 62.1 67 43.1C106.6 12.9 154.4 5.2 198 22.1C214.5 28.5 234.5 42.6 244.7 55C255.9 68.6 264.9 85.5 262.2 88.2C259.9 90.5 256 87.8 246.9 77.4C234.2 63 225.3 54.9 213.9 47.4C195.6 35.3 179.6 30.2 158 29.3C109.5 27.3 64.3 54.4 42.5 98.5C21.2 141.5 28 187.8 60.3 219.2C67.1 225.9 67.8 229.3 62.4 229.8C60.1 230 57.9 229.1 53.4 225.7ZM221.1 123.3C216.6 119.6 219.3 112 225 112C228.5 112 231 114.8 231 118.7C231 123.9 225.1 126.6 221.1 123.3Z"></path>
+      </svg>
+      <span class="wordmark">Pick-assist</span>
+      <span class="house">SPOONBILLS</span>
+    </header>
+
+    <div class="rule">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v17M7 20h10M5 7h14"></path>
+          <path d="M5 7l-3 6a3 3 0 0 0 6 0z M19 7l-3 6a3 3 0 0 0 6 0z"></path>
+        </g>
+      </svg>
+    </div>
+
+    <!-- 슬로건 원문: "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유"
+         줄바꿈 위치를 고정하려고 두 줄로 나누고, 이음표(-)는 화면에서만 숨긴다. -->
+    <h1 class="slogan">
+      <span class="slogan-main">망설이지 마세요</span><span class="visually-hidden"> - </span>
+      <span class="slogan-sub">판결은 Pick-assist 에게, 선택은 자유</span>
+    </h1>
+    <p class="lede">두 선택지를 올리면, 공정하게 판결합니다.</p>
+
+    <form id="pick-form" class="form" autocomplete="off" novalidate>
+      <div class="fields">
+        <label for="choice-a" class="visually-hidden">첫 번째 선택지</label>
+        <input
+          id="choice-a"
+          class="input"
+          type="text"
+          placeholder="Mercedes-Benz"
+          maxlength="60"
+          enterkeyhint="next"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+        >
+        <span class="versus" aria-hidden="true">VS</span>
+        <label for="choice-b" class="visually-hidden">두 번째 선택지</label>
+        <input
+          id="choice-b"
+          class="input"
+          type="text"
+          placeholder="BMW"
+          maxlength="60"
+          enterkeyhint="go"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+        >
+      </div>
+      <button id="pick-button" class="primary" type="submit">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <g fill="currentColor">
+            <g transform="rotate(-45 16 16)">
+              <rect x="8" y="3" width="16" height="8" rx="2"></rect>
+              <rect x="10.5" y="2" width="2" height="10" rx="0.8"></rect>
+              <rect x="19.5" y="2" width="2" height="10" rx="0.8"></rect>
+              <rect x="14.6" y="11" width="2.8" height="18" rx="1.4"></rect>
+            </g>
+            <rect x="1" y="27" width="14" height="3.5" rx="1.2"></rect>
+          </g>
+        </svg>
+        <span>골라줘</span>
+      </button>
+    </form>
+
+    <p id="notice" class="notice" role="status" hidden></p>
+
+    <div id="safety" class="safety" role="alert" hidden>
+      <p id="safety-message"></p>
+      <a id="safety-call" class="call-link" href="tel:109" hidden>109에 전화하기</a>
+    </div>
+
+    <section id="result" class="result" aria-live="polite" hidden>
+      <p class="result-head">
+        <svg class="gavel" viewBox="0 0 32 32" aria-hidden="true">
+          <g fill="currentColor">
+            <g transform="rotate(-45 16 16)">
+              <rect x="8" y="3" width="16" height="8" rx="2"></rect>
+              <rect x="10.5" y="2" width="2" height="10" rx="0.8"></rect>
+              <rect x="19.5" y="2" width="2" height="10" rx="0.8"></rect>
+              <rect x="14.6" y="11" width="2.8" height="18" rx="1.4"></rect>
+            </g>
+            <rect x="1" y="27" width="14" height="3.5" rx="1.2"></rect>
+          </g>
+        </svg>
+        <span>판결</span>
+      </p>
+      <p id="picked" class="picked"></p>
+      <p id="line" class="line"></p>
+      <p id="verdict-date" class="verdict-date"></p>
+
+      <div id="reactions" class="reactions" hidden>
+        <button id="react-like" class="chip" type="button">좋아</button>
+        <button id="react-other" class="chip" type="button">아… 다른 거</button>
+      </div>
+      <p id="reply" class="reply" hidden></p>
+
+      <div id="again" class="again" hidden>
+        <button id="again-same" type="button">다시 판결</button>
+        <button id="again-new" type="button">새로 입력</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <!-- 사실과 맞아야 한다: 서버·저장·전송이 없고 CSP가 외부 요청을 막는다. -->
+      <p>이 법정은 철저한 비공개 재판입니다.<br>사건도 판결도 이 기기 밖으로 새지 않아요.</p>
+      <p>Spoonbills</p>
+    </footer>
+  </main>
+
+  <!--
+    pick-core: DOM을 건드리지 않는 순수 로직.
+    tests/가 이 블록을 그대로 읽어 Node.js에서 실행한다.
+    id와 "var PickCore" 선언을 바꾸지 말 것.
+  -->
+  <script id="pick-core">
+  var PickCore = (function () {
+    "use strict";
+
+    // ─────────────────────────────────────────────
+    // 건강·안전 키워드
+    // 비교할 때 입력과 키워드 모두 공백을 지우고 소문자로 바꾼다.
+    // 그래서 "죽고 싶"은 "죽고싶"도 잡는다.
+    // 짧은 단어는 오탐이 많으니 넣기 전에 일상 표현과 겹치는지 확인할 것.
+    //   예: "주사"는 "주사위"와 겹쳐서 "주사 맞", "주사를"로 쓴다.
+    //   예: "약" 단독은 "약속", "예약"과 겹쳐서 쓰지 않는다.
+    //   예: "마약"은 "마약떡볶이"와, "대마"는 "대마도"와 겹쳐서 행동·명사 형태로 쓴다.
+    //   예: "끝내버릴까"는 "숙제 끝내버릴까"와 구분이 안 돼서 넣지 않는다.
+    // 알려진 오탐: "수술실 드라마"처럼 의료 단어가 들어간 일상 선택. 안전 쪽으로 둔다.
+    // ─────────────────────────────────────────────
+
+    // 자해·자살 표현 → 추첨하지 않고 자살예방 상담전화 109 안내
+    var SELF_HARM_KEYWORDS = [
+      "자살",
+      "자해",
+      "죽고 싶",
+      "죽을까",
+      "죽어버릴",
+      "죽어 버릴",
+      "죽고 말",
+      "목숨을 끊",
+      "극단적 선택",
+      "극단적인 선택",
+      "뛰어내리",
+      "투신",
+      "목매",
+      "목을 매",
+      "목을 맬",
+      "손목을 긋",
+      "손목 긋",
+      "과다복용",
+      "약을 모아",
+      "약 모아",
+      "생을 마감",
+      "살고 싶지 않",
+      "없어지고 싶",
+      "번개탄",
+      "유서를",
+      "유서 쓰",
+      "사라지고 싶",
+      "살기 싫",
+      "suicide",
+      "kill myself",
+      "self harm",
+      "self-harm"
+    ];
+
+    // 건강·안전 표현 → 추첨하지 않고 "전문가와 상의하세요"
+    var HEALTH_KEYWORDS = [
+      "약 복용",
+      "복용",
+      "투약",
+      "처방",
+      "약 먹",
+      "약을 먹",
+      "약 끊",
+      "약을 끊",
+      "약 안 먹",
+      "약 그만",
+      "진통제",
+      "수면제",
+      "항생제",
+      "해열제",
+      "항우울제",
+      "혈압약",
+      "인슐린",
+      "치료 중단",
+      "치료를 중단",
+      "치료 그만",
+      "치료 받",
+      "치료를 받",
+      "항암",
+      "수술",
+      "시술",
+      "입원",
+      "퇴원",
+      "응급실",
+      "병원",
+      "진료",
+      "주사 맞",
+      "주사를",
+      "백신",
+      "접종",
+      "임신",
+      "낙태",
+      "투석",
+      "음주운전",
+      "졸음운전",
+      "무면허",
+      "헬멧 없이",
+      "헬멧 안",
+      "안전벨트 없이",
+      "안전벨트 안",
+      "마약을",
+      "마약 하",
+      "마약 한",
+      "대마초",
+      "다이어트약",
+      "식욕억제제",
+      "피임약",
+      "타이레놀",
+      "아스피린",
+      "스테로이드",
+      "라식",
+      "라섹",
+      "임플란트",
+      "보톡스",
+      "필러",
+      "깁스",
+      "치과",
+      "한의원",
+      "정형외과",
+      "피부과",
+      "산부인과",
+      "정신과",
+      "술 먹고 운전",
+      "술 마시고 운전",
+      "medication",
+      "surgery",
+      "chemo"
+    ];
+
+    // ─────────────────────────────────────────────
+    // 구분자
+    // vs / or 는 영문·숫자 사이에 끼어 있으면 구분자로 보지 않는다.
+    //   "orange vs color" → "orange", "color" (or가 단어 안에 있음)
+    // 대소문자는 가리지 않는다 (vs, VS, Vs, OR 모두 인식).
+    // ─────────────────────────────────────────────
+    var LATIN_SEPARATOR = /(^|[^a-z0-9])(?:vs\.?|or)(?=[^a-z0-9]|$)/gi;
+    var PLAIN_SEPARATORS = ["/", "아니면"];
+    var SPLIT_MARK = "\u0000";
+
+    // ─────────────────────────────────────────────
+    // 문구
+    // {c} = 고른 쪽, {o} = 고르지 않은 쪽.
+    // {c:으로} 처럼 쓰면 받침에 맞춰 조사를 붙인다.
+    // 지원 조사: 으로, 은, 이, 을, 과
+    // ─────────────────────────────────────────────
+    // 목소리: 망설임 없이 판결을 내리는 판사. 짧고 단호하게. "떠먹여 준다"류 표현은 쓰지 않는다.
+    // 선택지가 음식이 아닐 수도 있으니 "드세요" 같은 먹는 동사는 피한다.
+    var RESULT_LINES = [
+      "{c}. 고민 끝.",
+      "{c:으로} 판결합니다.",
+      "{c}. 뒤돌아보지 마세요.",
+      "{c:으로} 갑니다. 이견은 받지 않습니다.",
+      "오늘은 {c}. 이미 정해졌습니다.",
+      "{c}. 더 생각하면 손해예요.",
+      "{c:이} 답입니다. 이유는 묻지 마세요.",
+      "{c}. 의사봉은 이미 내려쳤습니다.",
+      "{c:으로} 하시죠. 끝.",
+      "{c}. 이게 맞습니다.",
+      "{c:으로} 결정. 다음 고민으로 넘어가세요.",
+      "고민은 여기까지. {c}.",
+      "{c}. 두 번 말하지 않습니다.",
+      "{c:은} 오늘의 정답입니다.",
+      "{c}. 속으로 이미 바라고 있었잖아요.",
+      "본 법정은 {c:을} 택합니다.",
+      "{c}. 이걸로 갑니다.",
+      "{c}. 이 이상 고민은 사치입니다.",
+      "판결을 선고합니다. {c}.",
+      "{c}. 깔끔하게 정리됐습니다.",
+      "{c}. 지금 바로 움직이세요.",
+      "고르라면 {c}. 망설임 없이.",
+      "{c}. 오늘은 이쪽입니다.",
+      "{c}. 토 달지 않기로 해요.",
+      "{c}. 이의는 기각합니다.",
+      "주문은 하나. {c}.",
+      "{c}. 망설임은 제가 가져갑니다.",
+      "정답은 {c}. 박수는 생략합니다.",
+      "{c}. 그걸로 충분합니다.",
+      "{c}. 이 판결은 흔들리지 않습니다."
+    ];
+
+    var LIKE_LINES = [
+      "좋습니다. 그대로 가세요.",
+      "탁월한 선택입니다. 고른 건 저지만요.",
+      "역시. 이제 움직이세요.",
+      "좋습니다. 다음 사건도 맡겨 주세요.",
+      "승복하셨군요. 이것으로 폐정합니다.",
+      "그렇죠. 고민한 시간이 아까울 뿐입니다."
+    ];
+
+    var OTHER_LINE = "그럼 이미 답은 정해져 있었네요. {o:으로} 가세요.";
+
+    var NOTICES = {
+      empty: "두 칸에 선택지를 하나씩 적어 주세요.",
+      single: "나머지 한 칸도 채워 주세요.",
+      same: "두 선택지가 같네요. 판결할 사건이 아닙니다.",
+      tooMany: "한 칸에 하나씩, 두 가지만 적어 주세요."
+    };
+
+    var SAFETY_MESSAGES = {
+      health: "이 결정은 전문가와 상의하세요.",
+      selfHarm: "이건 제가 대신 고를 일이 아니에요. 혼자 견디지 말고 자살예방 상담전화 109에 전화해 이야기해 주세요. 24시간 열려 있습니다."
+    };
+
+    // ─────────────────────────────────────────────
+    // 난수
+    // ─────────────────────────────────────────────
+
+    // 0 이상 max 미만의 정수를 균등하게 뽑는다.
+    // 나머지 연산 편향을 없애려고 limit 이상 값은 버리고 다시 뽑는다.
+    // max가 2면 limit이 2^32라서 버리는 값이 없다.
+    function cryptoRandomInt(max) {
+      var isValid = Math.floor(max) === max && max >= 1 && max <= 0x100000000;
+      if (!isValid) {
+        throw new RangeError("max must be an integer between 1 and 2^32");
+      }
+      if (typeof crypto === "undefined" || !crypto.getRandomValues) {
+        throw new Error("crypto.getRandomValues is not available");
+      }
+
+      var buffer = new Uint32Array(1);
+      var limit = Math.floor(0x100000000 / max) * max;
+
+      do {
+        crypto.getRandomValues(buffer);
+      } while (buffer[0] >= limit);
+
+      return buffer[0] % max;
+    }
+
+    // ─────────────────────────────────────────────
+    // 파싱
+    // ─────────────────────────────────────────────
+
+    function normalizeForCompare(text) {
+      return text.normalize("NFC").replace(/\s+/g, " ").trim().toLowerCase();
+    }
+
+    // 결과: { ok: true, choices: [a, b] }
+    //    또는 { ok: false, reason: "empty" | "single" | "same" | "tooMany" }
+    function parseChoices(input) {
+      var text = String(input || "").normalize("NFC");
+
+      text = text.replace(LATIN_SEPARATOR, function (match, before) {
+        return before + SPLIT_MARK;
+      });
+
+      PLAIN_SEPARATORS.forEach(function (separator) {
+        text = text.split(separator).join(SPLIT_MARK);
+      });
+
+      var parts = text
+        .split(SPLIT_MARK)
+        .map(function (part) {
+          return part.replace(/\s+/g, " ").trim();
+        })
+        .filter(function (part) {
+          return part.length > 0;
+        });
+
+      if (parts.length === 0) {
+        return { ok: false, reason: "empty" };
+      }
+      if (parts.length === 1) {
+        return { ok: false, reason: "single" };
+      }
+      if (parts.length > 2) {
+        return { ok: false, reason: "tooMany" };
+      }
+      if (normalizeForCompare(parts[0]) === normalizeForCompare(parts[1])) {
+        return { ok: false, reason: "same" };
+      }
+
+      return { ok: true, choices: parts };
+    }
+
+    function tidy(text) {
+      return String(text || "").normalize("NFC").replace(/\s+/g, " ").trim();
+    }
+
+    // 두 칸 입력. 결과 모양은 parseChoices와 같다.
+    // 한 칸만 채웠는데 그 안에 "짜장 vs 짬뽕"처럼 구분자가 있으면 나눠서 쓴다.
+    // 이때 split: true를 붙여 화면이 두 칸을 채울 수 있게 한다.
+    function parsePair(first, second) {
+      var a = tidy(first);
+      var b = tidy(second);
+
+      if (a && b) {
+        if (normalizeForCompare(a) === normalizeForCompare(b)) {
+          return { ok: false, reason: "same" };
+        }
+        return { ok: true, choices: [a, b] };
+      }
+
+      if (!a && !b) {
+        return { ok: false, reason: "empty" };
+      }
+
+      var parsed = parseChoices(a || b);
+      if (parsed.ok) {
+        return { ok: true, choices: parsed.choices, split: true };
+      }
+      if (parsed.reason === "same" || parsed.reason === "tooMany") {
+        return parsed;
+      }
+      return { ok: false, reason: "single" };
+    }
+
+    // ─────────────────────────────────────────────
+    // 건강·안전 필터
+    // ─────────────────────────────────────────────
+
+    function compact(text) {
+      return String(text || "").normalize("NFC").replace(/\s+/g, "").toLowerCase();
+    }
+
+    function containsAny(text, keywords) {
+      var target = compact(text);
+      return keywords.some(function (keyword) {
+        return target.indexOf(compact(keyword)) !== -1;
+      });
+    }
+
+    // 결과: "selfHarm" | "health" | null
+    // 자해·자살이 건강보다 우선한다.
+    function checkSafety(input) {
+      if (containsAny(input, SELF_HARM_KEYWORDS)) {
+        return "selfHarm";
+      }
+      if (containsAny(input, HEALTH_KEYWORDS)) {
+        return "health";
+      }
+      return null;
+    }
+
+    // ─────────────────────────────────────────────
+    // 결정
+    // 필터 → 파싱 → 추첨 순서. 필터에 걸리면 randomInt를 부르지 않는다.
+    // ─────────────────────────────────────────────
+
+    function decideParsed(safetyText, parsed, randomInt) {
+      var draw = randomInt || cryptoRandomInt;
+
+      var safety = checkSafety(safetyText);
+      if (safety) {
+        return { status: "safety", kind: safety, message: SAFETY_MESSAGES[safety] };
+      }
+
+      if (!parsed.ok) {
+        return { status: "invalid", reason: parsed.reason, message: NOTICES[parsed.reason] };
+      }
+
+      var index = draw(2);
+      return {
+        status: "picked",
+        choices: parsed.choices,
+        split: Boolean(parsed.split),
+        index: index,
+        picked: parsed.choices[index],
+        other: parsed.choices[1 - index]
+      };
+    }
+
+    // 한 줄 입력: "짜장 vs 짬뽕"
+    function decide(input, randomInt) {
+      return decideParsed(input, parseChoices(input), randomInt);
+    }
+
+    // 두 칸 입력: 화면이 쓰는 방식
+    function decidePair(first, second, randomInt) {
+      // 공백으로 이으면 필터가 공백을 지운 뒤 칸 경계를 넘어 오탐한다 ("예약" + "먹방" → "약먹").
+      var safetyText = String(first || "") + " / " + String(second || "");
+      return decideParsed(safetyText, parsePair(first, second), randomInt);
+    }
+
+    // ─────────────────────────────────────────────
+    // 조사
+    // ─────────────────────────────────────────────
+
+    var HANGUL_START = 0xac00;
+    var HANGUL_END = 0xd7a3;
+    var JONG_RIEUL = 8;
+
+    // 숫자를 한국어로 읽었을 때 받침: 영 일 이 삼 사 오 육 칠 팔 구
+    var DIGIT_JONG = [21, 8, 0, 16, 0, 0, 1, 8, 8, 0];
+
+    // 마지막 글자의 받침 번호. 0이면 받침 없음.
+    // 영문 등 판단하기 어려운 글자는 받침 없음으로 본다.
+    function finalConsonant(word) {
+      var trimmed = String(word).replace(/[^0-9A-Za-z가-힣]+$/, "");
+      if (trimmed.length === 0) {
+        return 0;
+      }
+
+      var last = trimmed.charAt(trimmed.length - 1);
+      var code = last.charCodeAt(0);
+
+      if (code >= HANGUL_START && code <= HANGUL_END) {
+        return (code - HANGUL_START) % 28;
+      }
+      if (last >= "0" && last <= "9") {
+        return DIGIT_JONG[Number(last)];
+      }
+      return 0;
+    }
+
+    function withParticle(word, particle) {
+      var jong = finalConsonant(word);
+      var hasJong = jong !== 0;
+
+      switch (particle) {
+        case "으로":
+          return word + (hasJong && jong !== JONG_RIEUL ? "으로" : "로");
+        case "은":
+          return word + (hasJong ? "은" : "는");
+        case "이":
+          return word + (hasJong ? "이" : "가");
+        case "을":
+          return word + (hasJong ? "을" : "를");
+        case "과":
+          return word + (hasJong ? "과" : "와");
+        default:
+          return word + particle;
+      }
+    }
+
+    function fillTemplate(template, values) {
+      return template.replace(/\{([co])(?::([^}]+))?\}/g, function (match, key, particle) {
+        var word = key === "c" ? values.picked : values.other;
+        return particle ? withParticle(word, particle) : word;
+      });
+    }
+
+    // 문구 순번을 고른다. 직전 문구(avoidIndex)는 다시 나오지 않게 한다.
+    // 이것은 문구 선택일 뿐 결과(어느 쪽을 고르는지)와는 무관하다.
+    function pickLineIndex(count, randomInt, avoidIndex) {
+      var draw = randomInt || cryptoRandomInt;
+      var canAvoid = count > 1 && avoidIndex >= 0 && avoidIndex < count;
+
+      if (!canAvoid) {
+        return draw(count);
+      }
+
+      var index = draw(count - 1);
+      return index >= avoidIndex ? index + 1 : index;
+    }
+
+    return {
+      SELF_HARM_KEYWORDS: SELF_HARM_KEYWORDS,
+      HEALTH_KEYWORDS: HEALTH_KEYWORDS,
+      RESULT_LINES: RESULT_LINES,
+      LIKE_LINES: LIKE_LINES,
+      OTHER_LINE: OTHER_LINE,
+      NOTICES: NOTICES,
+      SAFETY_MESSAGES: SAFETY_MESSAGES,
+      cryptoRandomInt: cryptoRandomInt,
+      parseChoices: parseChoices,
+      parsePair: parsePair,
+      checkSafety: checkSafety,
+      decide: decide,
+      decidePair: decidePair,
+      withParticle: withParticle,
+      fillTemplate: fillTemplate,
+      pickLineIndex: pickLineIndex
+    };
+  })();
+  </script>
+
+  <!-- 화면: DOM 연결과 연출만 담당한다. 결과는 PickCore.decide가 정한다. -->
+  <script>
+  (function () {
+    "use strict";
+
+    var ROLL_DURATION_MS = 700;
+    var ROLL_STEP_MS = 90;
+    var REDUCED_ROLL_DURATION_MS = 500;
+    var CRYPTO_ERROR_MESSAGE = "이 브라우저에서는 공정한 추첨을 할 수 없어요. 최신 브라우저로 열어 주세요.";
+
+    var form = document.getElementById("pick-form");
+    var inputA = document.getElementById("choice-a");
+    var inputB = document.getElementById("choice-b");
+    var pickButton = document.getElementById("pick-button");
+    var notice = document.getElementById("notice");
+    var safety = document.getElementById("safety");
+    var safetyMessage = document.getElementById("safety-message");
+    var safetyCall = document.getElementById("safety-call");
+    var result = document.getElementById("result");
+    var pickedText = document.getElementById("picked");
+    var verdictDate = document.getElementById("verdict-date");
+    var lineText = document.getElementById("line");
+    var reactions = document.getElementById("reactions");
+    var reactLike = document.getElementById("react-like");
+    var reactOther = document.getElementById("react-other");
+    var reply = document.getElementById("reply");
+    var again = document.getElementById("again");
+    var againSame = document.getElementById("again-same");
+    var againNew = document.getElementById("again-new");
+
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var coarsePointer = window.matchMedia("(pointer: coarse)");
+
+    var state = {
+      rolling: false,
+      lastPair: ["", ""],
+      lastDecision: null,
+      lastLineIndex: -1,
+      lastLikeIndex: -1
+    };
+
+    function clearOutputs() {
+      notice.hidden = true;
+      safety.hidden = true;
+      safetyCall.hidden = true;
+      safety.classList.remove("is-care");
+      result.hidden = true;
+      reply.hidden = true;
+    }
+
+    function showNotice(message) {
+      notice.textContent = message;
+      notice.hidden = false;
+    }
+
+    function showSafety(decision) {
+      safetyMessage.textContent = decision.message;
+
+      var isSelfHarm = decision.kind === "selfHarm";
+      safetyCall.hidden = !isSelfHarm;
+      safety.classList.toggle("is-care", isSelfHarm);
+      safety.hidden = false;
+    }
+
+    function setBusy(busy) {
+      state.rolling = busy;
+      pickButton.disabled = busy;
+      againSame.disabled = busy;
+      againNew.disabled = busy;
+    }
+
+    function run(first, second) {
+      if (state.rolling) {
+        return;
+      }
+
+      clearOutputs();
+
+      var decision;
+      try {
+        decision = PickCore.decidePair(first, second);
+      } catch (error) {
+        showNotice(CRYPTO_ERROR_MESSAGE);
+        return;
+      }
+
+      if (decision.status === "safety") {
+        showSafety(decision);
+        return;
+      }
+
+      if (decision.status === "invalid") {
+        showNotice(decision.message);
+        return;
+      }
+
+      if (decision.split) {
+        // 한 칸에 "짜장 vs 짬뽕"을 붙여 넣은 경우 두 칸으로 나눠 보여준다.
+        inputA.value = decision.choices[0];
+        inputB.value = decision.choices[1];
+      }
+
+      state.lastPair = [decision.choices[0], decision.choices[1]];
+      state.lastDecision = decision;
+
+      if (coarsePointer.matches && document.activeElement) {
+        // 모바일 키보드를 내려서 결과가 가려지지 않게 한다.
+        document.activeElement.blur();
+      }
+
+      roll(decision);
+    }
+
+    // 짧은 연출. 결과는 이미 정해져 있고, 연출은 보여주기만 한다.
+    function roll(decision) {
+      setBusy(true);
+
+      result.classList.remove("is-revealed");
+      result.classList.add("is-rolling");
+      reactions.hidden = true;
+      again.hidden = true;
+      lineText.textContent = "심리 중…";
+      verdictDate.textContent = "";
+      pickedText.textContent = decision.choices[0];
+      result.hidden = false;
+      result.scrollIntoView({ block: "nearest", behavior: "smooth" });
+
+      if (reducedMotion.matches) {
+        pickedText.textContent = "…";
+        window.setTimeout(function () {
+          reveal(decision);
+        }, REDUCED_ROLL_DURATION_MS);
+        return;
+      }
+
+      var step = 0;
+      var flicker = window.setInterval(function () {
+        step += 1;
+        pickedText.textContent = decision.choices[step % 2];
+      }, ROLL_STEP_MS);
+
+      window.setTimeout(function () {
+        window.clearInterval(flicker);
+        reveal(decision);
+      }, ROLL_DURATION_MS);
+    }
+
+    // 판결문 아래 "2026. 9. 29. 선고" (기기 시계 기준)
+    function formatVerdictDate(date) {
+      return date.getFullYear() + ". " + (date.getMonth() + 1) + ". " + date.getDate() + ". 선고";
+    }
+
+    function reveal(decision) {
+      var lines = PickCore.RESULT_LINES;
+      var lineIndex;
+
+      try {
+        lineIndex = PickCore.pickLineIndex(lines.length, null, state.lastLineIndex);
+      } catch (error) {
+        lineIndex = 0;
+      }
+      state.lastLineIndex = lineIndex;
+
+      pickedText.textContent = decision.picked;
+      lineText.textContent = PickCore.fillTemplate(lines[lineIndex], decision);
+      verdictDate.textContent = formatVerdictDate(new Date());
+
+      result.classList.remove("is-rolling");
+      // 애니메이션을 다시 걸기 위해 레이아웃을 한 번 읽는다.
+      void result.offsetWidth;
+      result.classList.add("is-revealed");
+
+      reactions.hidden = false;
+      again.hidden = false;
+      setBusy(false);
+    }
+
+    function showReply(text) {
+      reactions.hidden = true;
+      reply.textContent = text;
+      reply.hidden = false;
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      run(inputA.value, inputB.value);
+    });
+
+    // 첫 칸에서 Enter: 둘째 칸이 비어 있으면 둘째 칸으로 넘어간다.
+    // 단, 첫 칸에 "짜장 vs 짬뽕"처럼 둘을 다 적었으면 바로 고른다.
+    inputA.addEventListener("keydown", function (event) {
+      if (event.key !== "Enter" || event.isComposing) {
+        return;
+      }
+
+      var secondIsEmpty = inputB.value.trim() === "";
+      var firstHasBoth = PickCore.parseChoices(inputA.value).ok;
+
+      if (secondIsEmpty && !firstHasBoth) {
+        event.preventDefault();
+        inputB.focus();
+      }
+    });
+
+    [inputA, inputB].forEach(function (field) {
+      field.addEventListener("input", function () {
+        notice.hidden = true;
+      });
+    });
+
+    reactLike.addEventListener("click", function () {
+      var lines = PickCore.LIKE_LINES;
+      var index;
+
+      try {
+        index = PickCore.pickLineIndex(lines.length, null, state.lastLikeIndex);
+      } catch (error) {
+        index = 0;
+      }
+      state.lastLikeIndex = index;
+
+      showReply(lines[index]);
+    });
+
+    // "다른 거"는 재추첨하지 않는다. 이미 마음이 정해져 있었다는 걸 짚어 줄 뿐이다.
+    reactOther.addEventListener("click", function () {
+      if (!state.lastDecision) {
+        return;
+      }
+      showReply(PickCore.fillTemplate(PickCore.OTHER_LINE, state.lastDecision));
+    });
+
+    againSame.addEventListener("click", function () {
+      run(state.lastPair[0], state.lastPair[1]);
+    });
+
+    againNew.addEventListener("click", function () {
+      clearOutputs();
+      inputA.value = "";
+      inputB.value = "";
+      state.lastDecision = null;
+      inputA.focus();
+    });
+  })();
+  </script>
+</body>
+</html>
