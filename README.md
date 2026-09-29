@@ -16,8 +16,8 @@ Don't hesitate — leave the verdict to Pick-assist; the choice is still yours.
 
 ## How to use
 
-1. Type one option in each field, e.g. `짜장` and `짬뽕`.
-   Enter in the first field jumps to the second. Pasting `짜장 vs 짬뽕` into one field
+1. Type one option in each field, e.g. `Mercedes-Benz` and `BMW`.
+   Enter in the first field jumps to the second. Pasting `Mercedes-Benz vs BMW` into one field
    also works (separators: `vs`, `VS`, `Vs`, `/`, `아니면`, `or`).
 2. Press **골라줘** (or hit Enter). After a short gavel swing, you get the verdict and one decisive line.
 3. Optionally react with **좋아** or **아… 다른 거**. If you wanted the other one,
@@ -66,8 +66,8 @@ Stat-assist) 중 하나인 작은 웹 도구입니다. 두 선택지 중 하나�
 
 ## 사용법
 
-1. 두 입력칸에 선택지를 하나씩 적습니다. 예: `짜장`, `짬뽕`
-   첫 칸에서 Enter를 치면 둘째 칸으로 넘어갑니다. 한 칸에 `짜장 vs 짬뽕`처럼 붙여 넣어도
+1. 두 입력칸에 선택지를 하나씩 적습니다. 예: `Mercedes-Benz`, `BMW`
+   첫 칸에서 Enter를 치면 둘째 칸으로 넘어갑니다. 한 칸에 `Mercedes-Benz vs BMW`처럼 붙여 넣어도
    알아서 나눕니다 (구분자: `vs`, `VS`, `Vs`, `/`, `아니면`, `or`).
 2. **골라줘**를 누르거나 Enter를 칩니다. 의사봉 연출 뒤에 판결과 단호한 한 문장이 나옵니다.
 3. 원하면 **좋아** 또는 **아… 다른 거**를 누릅니다. 다른 쪽이 아쉬웠다면
