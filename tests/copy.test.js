@@ -64,3 +64,11 @@ test("문구 선택은 직전 문구를 반복하지 않고, 모든 문구가 �
 
   assert.equal(seen.size, count);
 });
+
+test("결과·반응 문구에 '떠먹여'·'숟가락'류 표현을 쓰지 않는다", () => {
+  const lines = [...core.RESULT_LINES, ...core.LIKE_LINES, core.OTHER_LINE];
+
+  for (const line of lines) {
+    assert.doesNotMatch(line, /떠먹|숟가락|숟갈|떠 드|떠 왔/, line);
+  }
+});
