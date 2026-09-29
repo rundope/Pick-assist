@@ -2,9 +2,25 @@
 
 세션 사이 인수인계 기록. 새 세션은 대화 기록을 모르므로 이어서 할 정보는 여기에 남긴다.
 
-## 마지막 갱신: 2026-09-29
+## 마지막 갱신: 2026-09-29 (2차: 재판정 디자인)
 
-### 오늘 한 일
+### 이번에 한 일
+
+- 저장소를 `rundope/Pick-assist`로 새로 만들어서 로컬 `origin`을 그쪽으로 바꿨다. README 데모 링크(`https://rundope.github.io/Pick-assist/`)와 이제 맞는다.
+- 입력을 `vs` 한 줄에서 **두 칸**으로 바꿨다. 첫 칸에서 Enter를 치면 둘째 칸으로 넘어간다. 한 칸에 `짜장 vs 짬뽕`을 붙여 넣어도 나눠 준다 (`parsePair`, `decidePair`).
+- 안전 필터는 두 칸을 `" / "`로 이어서 검사한다. 공백으로 이으면 칸 경계를 넘는 오탐이 생긴다 ("예약" + "먹방" → "약먹").
+- 로고를 사용자가 준 The Spoon Lab 로고(저어새와 원호)로 바꿨다. PNG를 potrace로 벡터화해 inline SVG와 favicon으로 넣었고, 색은 테마를 따른다.
+- 디자인을 **재판정** 콘셉트로 바꿨다. 남색 잉크·양피지·황동색, 명조 제목, VS 도장, 판결문 카드, 의사봉 연출, 선고 날짜를 넣었다.
+- 슬로건: "망설임은 기각합니다. 지금 결정하세요." "떠먹여 준다"는 나쁜 이미지라서 결과 문구·반응 문구·footer에서도 빼고, 판사 목소리로 바꿨다. 테스트로 막아 두었다.
+- 테스트는 38개이고 모두 통과한다.
+
+### 아직 결정되지 않은 것
+
+- CLAUDE.md 첫머리와 README 소개의 브랜드 톤 문장("숟가락으로 떠먹여 준다")은 그대로 두었다. 사용자 결정을 기다린다.
+
+## 1차 기록 (2026-09-29)
+
+### 한 일
 
 - 저장소를 처음부터 만들었다. 원격이 완전히 비어 있어서 `main`에 빈 초기 commit(`Initialize repository`)만 올려 Pull Request(PR)의 기준 branch로 삼았다.
 - `CLAUDE.md`(제품 원칙·작업 규칙)와 `.claude/skills/wrap-up`, `.claude/skills/start-work` 스킬을 추가했다.
@@ -27,9 +43,9 @@
 
 ### 다음에 할 일 (우선순위 순)
 
-1. 저장소 이름과 데모 주소를 맞춘다. 실제 저장소 이름은 `Pick_assist`(밑줄)라서 GitHub Pages 주소는 `https://rundope.github.io/Pick_assist/`가 된다. README의 데모 링크(`Pick-assist`, 하이픈)와 맞추려면 저장소 이름을 `Pick-assist`로 바꾸는 편이 낫다. 그 뒤 Pages를 켠다.
-2. 실제 iPhone Safari와 iPad에서 확인하고, README의 스크린샷 자리를 실제 이미지로 채운다.
-3. 건강·안전 키워드의 오탐·미탐을 실제 입력 예시로 보강한다 (`index.html` 상단 상수, `tests/filter.test.js`에 예시 추가).
+1. push 권한을 해결한다. Claude GitHub App이 `rundope/Pick-assist`에 설치되어 있지 않아 push가 403으로 막혀 있다. 해결되면 `main`(빈 초기 commit)을 먼저 push해서 기본 branch로 만들고, 작업 branch를 push한 뒤 Pull Request(PR)를 만든다. 그다음 Settings → Pages에서 `main` / root를 켠다.
+2. 실제 iPhone Safari와 iPad에서 확인하고, README의 스크린샷 자리를 채운다. iOS에는 한글 명조 폰트가 기본으로 없어서 제목이 고딕으로 보일 수 있다.
+3. 건강·안전 키워드의 오탐·미탐을 보강한다.
 
 ### 주의할 점
 
