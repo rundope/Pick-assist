@@ -2,7 +2,7 @@
 
 **Can't decide between two things? Type them in, press one button, and get a firm answer.**
 
-Pick-assist is a tiny web tool from The Spoon Lab's "~assist" family
+Pick-assist is a tiny web tool from Spoonbills' "~assist" family
 (Workflow-assist, Densi-assist, Stat-assist). It picks one of two options with a
 fair 50:50 draw and says it without hesitation — we spoon-feed you the answer;
 take it if you like it, turn your head if you don't.
@@ -42,7 +42,7 @@ node --test tests/*.test.js   # Node.js 18+
 
 ## License
 
-[MIT](LICENSE) © 2026 The Spoon Lab
+[MIT](LICENSE) © 2026 Spoonbills
 
 ---
 
@@ -50,7 +50,7 @@ node --test tests/*.test.js   # Node.js 18+
 
 **둘 중에 망설여질 때, 입력하고 버튼 하나 누르면 단호하게 골라 드립니다.**
 
-Pick-assist는 The Spoon Lab의 "~assist" 제품군(Workflow-assist, Densi-assist,
+Pick-assist는 Spoonbills의 "~assist" 제품군(Workflow-assist, Densi-assist,
 Stat-assist) 중 하나인 작은 웹 도구입니다. 두 선택지 중 하나를 공정한 50:50으로
 고르고, 망설임 없이 말해 줍니다. 숟가락으로 떠먹여 드립니다 — 먹고 싶으면 먹고,
 싫으면 고개를 돌리면 됩니다.
@@ -90,4 +90,4 @@ node --test tests/*.test.js   # Node.js 18 이상
 
 ## 라이선스
 
-[MIT](LICENSE) © 2026 The Spoon Lab
+[MIT](LICENSE) © 2026 Spoonbills

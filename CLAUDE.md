@@ -1,8 +1,10 @@
 # CLAUDE.md
 
 Pick-assist는 두 선택지 중 하나를 공정한 50:50으로 골라 주고, 단호한 한 문장을 붙여 주는 웹 도구다.
-The Spoon Lab "~assist" 제품군(Workflow-assist, Densi-assist, Stat-assist)의 하나이며,
+Spoonbills "~assist" 제품군(Workflow-assist, Densi-assist, Stat-assist)의 하나이며,
 브랜드 톤은 "숟가락으로 떠먹여 준다 — 먹고 싶으면 먹고, 싫으면 고개를 돌리면 된다"이다.
+
+회사 이름은 **Spoonbills**다. 예전 이름 "The Spoon Lab"은 어디에도 쓰지 않는다 (화면, 문서, LICENSE, 커밋 메시지 포함).
 
 ## 제품 원칙 (절대 바꾸지 않는다)
 
