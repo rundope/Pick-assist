@@ -2,7 +2,8 @@
 
 Pick-assist는 두 선택지 중 하나를 공정한 50:50으로 골라 주고, 단호한 한 문장을 붙여 주는 웹 도구다.
 Spoonbills "~assist" 제품군(Workflow-assist, Densi-assist, Stat-assist)의 하나이며,
-브랜드 톤은 "숟가락으로 떠먹여 준다 — 먹고 싶으면 먹고, 싫으면 고개를 돌리면 된다"이다.
+브랜드 톤은 "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유"이다.
+"숟가락으로 떠먹여 준다"류 표현은 나쁜 이미지라서 쓰지 않는다.
 
 회사 이름은 **Spoonbills**다. 예전 이름 "The Spoon Lab"은 어디에도 쓰지 않는다 (화면, 문서, LICENSE, 커밋 메시지 포함).
 

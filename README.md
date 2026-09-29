@@ -4,8 +4,8 @@
 
 Pick-assist is a tiny web tool from Spoonbills' "~assist" family
 (Workflow-assist, Densi-assist, Stat-assist). It picks one of two options with a
-fair 50:50 draw and says it without hesitation — we spoon-feed you the answer;
-take it if you like it, turn your head if you don't.
+fair 50:50 draw and hands down the verdict without hesitation.
+Don't hesitate — leave the verdict to Pick-assist; the choice is still yours.
 
 <!-- Screenshot: add docs/screenshot.png and replace this line -->
 _Screenshot coming soon._
@@ -52,8 +52,8 @@ node --test tests/*.test.js   # Node.js 18+
 
 Pick-assist는 Spoonbills의 "~assist" 제품군(Workflow-assist, Densi-assist,
 Stat-assist) 중 하나인 작은 웹 도구입니다. 두 선택지 중 하나를 공정한 50:50으로
-고르고, 망설임 없이 말해 줍니다. 숟가락으로 떠먹여 드립니다 — 먹고 싶으면 먹고,
-싫으면 고개를 돌리면 됩니다.
+고르고, 망설임 없이 판결합니다.
+망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유.
 
 <!-- 스크린샷: docs/screenshot.png를 추가하고 이 줄을 바꿔 주세요 -->
 _스크린샷 준비 중._
