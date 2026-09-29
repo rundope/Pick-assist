@@ -7,8 +7,10 @@ Pick-assist is a tiny web tool from Spoonbills' "~assist" family
 fair 50:50 draw and hands down the verdict without hesitation.
 Don't hesitate — leave the verdict to Pick-assist; the choice is still yours.
 
-<!-- Screenshot: add docs/screenshot.png and replace this line -->
-_Screenshot coming soon._
+<p>
+  <img src="docs/screenshot-light.png" alt="Pick-assist verdict screen in light mode" width="300">
+  <img src="docs/screenshot-dark.png" alt="Pick-assist verdict screen in dark mode" width="300">
+</p>
 
 **Demo:** https://rundope.github.io/Pick-assist/
 
@@ -55,8 +57,10 @@ Stat-assist) 중 하나인 작은 웹 도구입니다. 두 선택지 중 하나�
 고르고, 망설임 없이 판결합니다.
 망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유.
 
-<!-- 스크린샷: docs/screenshot.png를 추가하고 이 줄을 바꿔 주세요 -->
-_스크린샷 준비 중._
+<p>
+  <img src="docs/screenshot-light.png" alt="라이트 모드 판결 화면" width="300">
+  <img src="docs/screenshot-dark.png" alt="다크 모드 판결 화면" width="300">
+</p>
 
 **데모:** https://rundope.github.io/Pick-assist/
 
