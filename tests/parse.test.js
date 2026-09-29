@@ -74,3 +74,51 @@ test("잘못된 입력에는 안내 문구가 붙고 추첨하지 않는다", ()
   }
   assert.equal(calls, 0);
 });
+
+// ── 두 칸 입력 (화면이 쓰는 방식) ──
+
+function pair(first, second) {
+  return plain(core.parsePair(first, second));
+}
+
+test("두 칸에 하나씩 적으면 그대로 두 선택지가 된다", () => {
+  assert.deepEqual(pair("짜장", "짬뽕"), { ok: true, choices: ["짜장", "짬뽕"] });
+  assert.deepEqual(pair("  짜장면  곱빼기 ", "짬뽕"), { ok: true, choices: ["짜장면 곱빼기", "짬뽕"] });
+});
+
+test("두 칸 모두 채우면 칸 안의 vs / or 를 나누지 않는다", () => {
+  assert.deepEqual(pair("짜장 or 간짜장", "짬뽕"), { ok: true, choices: ["짜장 or 간짜장", "짬뽕"] });
+});
+
+test("두 칸이 비면 empty, 한 칸만 채우면 single", () => {
+  assert.deepEqual(pair("", "  "), { ok: false, reason: "empty" });
+  assert.deepEqual(pair("짜장", ""), { ok: false, reason: "single" });
+  assert.deepEqual(pair("", "짬뽕"), { ok: false, reason: "single" });
+});
+
+test("두 칸이 같으면 same", () => {
+  assert.deepEqual(pair("짜장", " 짜장 "), { ok: false, reason: "same" });
+  assert.deepEqual(pair("Pizza", "pizza"), { ok: false, reason: "same" });
+});
+
+test("한 칸에 '짜장 vs 짬뽕'을 적으면 나눠 쓰고 split 표시를 붙인다", () => {
+  assert.deepEqual(pair("짜장 vs 짬뽕", ""), { ok: true, choices: ["짜장", "짬뽕"], split: true });
+  assert.deepEqual(pair("", "짜장/짬뽕"), { ok: true, choices: ["짜장", "짬뽕"], split: true });
+  assert.deepEqual(pair("짜장 vs 짜장", ""), { ok: false, reason: "same" });
+  assert.deepEqual(pair("a vs b vs c", ""), { ok: false, reason: "tooMany" });
+});
+
+test("두 칸 입력도 잘못되면 안내 문구가 붙고 추첨하지 않는다", () => {
+  let calls = 0;
+  const spy = () => {
+    calls += 1;
+    return 0;
+  };
+
+  for (const [first, second] of [["", ""], ["짜장", ""], ["짜장", "짜장"]]) {
+    const decision = plain(core.decidePair(first, second, spy));
+    assert.equal(decision.status, "invalid", `${first} / ${second}`);
+    assert.ok(decision.message.length > 0);
+  }
+  assert.equal(calls, 0);
+});

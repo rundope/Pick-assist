@@ -130,6 +130,21 @@
       border: 0;
     }
 
+    .fields {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+    }
+
+    .versus {
+      align-self: center;
+      font-size: 0.85rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
     .input {
       width: 100%;
       min-height: 56px;
@@ -357,17 +372,15 @@
         padding-top: calc(64px + env(safe-area-inset-top));
       }
 
-      .form {
+      .fields {
         flex-direction: row;
+        align-items: center;
+        gap: 12px;
       }
 
-      .input {
+      .fields .input {
         flex: 1;
-      }
-
-      .primary {
-        flex: none;
-        min-width: 120px;
+        min-width: 0;
       }
 
       .result {
@@ -399,18 +412,33 @@
     <h1>둘 중에 망설여지면,<br>제가 떠먹여 드립니다.</h1>
 
     <form id="pick-form" class="form" autocomplete="off" novalidate>
-      <label for="pick-input" class="visually-hidden">두 선택지 입력</label>
-      <input
-        id="pick-input"
-        class="input"
-        type="text"
-        placeholder="짜장 vs 짬뽕"
-        maxlength="120"
-        enterkeyhint="go"
-        autocapitalize="off"
-        autocorrect="off"
-        spellcheck="false"
-      >
+      <div class="fields">
+        <label for="choice-a" class="visually-hidden">첫 번째 선택지</label>
+        <input
+          id="choice-a"
+          class="input"
+          type="text"
+          placeholder="짜장"
+          maxlength="60"
+          enterkeyhint="next"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+        >
+        <span class="versus" aria-hidden="true">VS</span>
+        <label for="choice-b" class="visually-hidden">두 번째 선택지</label>
+        <input
+          id="choice-b"
+          class="input"
+          type="text"
+          placeholder="짬뽕"
+          maxlength="60"
+          enterkeyhint="go"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+        >
+      </div>
       <button id="pick-button" class="primary" type="submit">골라줘</button>
     </form>
 
@@ -599,10 +627,10 @@
     var OTHER_LINE = "그럼 이미 답은 정해져 있었네요. {o:으로} 가세요.";
 
     var NOTICES = {
-      empty: "두 가지를 적어 주세요. 예: 짜장 vs 짬뽕",
-      single: "선택지가 하나뿐이네요. vs로 하나 더 붙여 주세요.",
-      same: "둘이 똑같네요. 고민할 필요가 없습니다.",
-      tooMany: "둘 중 하나만 골라 드립니다. 두 개로 줄여 주세요."
+      empty: "두 칸에 선택지를 하나씩 적어 주세요.",
+      single: "나머지 한 칸도 채워 주세요.",
+      same: "두 선택지가 같네요. 고민할 필요가 없습니다.",
+      tooMany: "한 칸에 하나씩, 두 가지만 적어 주세요."
     };
 
     var SAFETY_MESSAGES = {
@@ -682,6 +710,38 @@
       return { ok: true, choices: parts };
     }
 
+    function tidy(text) {
+      return String(text || "").normalize("NFC").replace(/\s+/g, " ").trim();
+    }
+
+    // 두 칸 입력. 결과 모양은 parseChoices와 같다.
+    // 한 칸만 채웠는데 그 안에 "짜장 vs 짬뽕"처럼 구분자가 있으면 나눠서 쓴다.
+    // 이때 split: true를 붙여 화면이 두 칸을 채울 수 있게 한다.
+    function parsePair(first, second) {
+      var a = tidy(first);
+      var b = tidy(second);
+
+      if (a && b) {
+        if (normalizeForCompare(a) === normalizeForCompare(b)) {
+          return { ok: false, reason: "same" };
+        }
+        return { ok: true, choices: [a, b] };
+      }
+
+      if (!a && !b) {
+        return { ok: false, reason: "empty" };
+      }
+
+      var parsed = parseChoices(a || b);
+      if (parsed.ok) {
+        return { ok: true, choices: parsed.choices, split: true };
+      }
+      if (parsed.reason === "same" || parsed.reason === "tooMany") {
+        return parsed;
+      }
+      return { ok: false, reason: "single" };
+    }
+
     // ─────────────────────────────────────────────
     // 건강·안전 필터
     // ─────────────────────────────────────────────
@@ -714,15 +774,14 @@
     // 필터 → 파싱 → 추첨 순서. 필터에 걸리면 randomInt를 부르지 않는다.
     // ─────────────────────────────────────────────
 
-    function decide(input, randomInt) {
+    function decideParsed(safetyText, parsed, randomInt) {
       var draw = randomInt || cryptoRandomInt;
 
-      var safety = checkSafety(input);
+      var safety = checkSafety(safetyText);
       if (safety) {
         return { status: "safety", kind: safety, message: SAFETY_MESSAGES[safety] };
       }
 
-      var parsed = parseChoices(input);
       if (!parsed.ok) {
         return { status: "invalid", reason: parsed.reason, message: NOTICES[parsed.reason] };
       }
@@ -731,10 +790,23 @@
       return {
         status: "picked",
         choices: parsed.choices,
+        split: Boolean(parsed.split),
         index: index,
         picked: parsed.choices[index],
         other: parsed.choices[1 - index]
       };
+    }
+
+    // 한 줄 입력: "짜장 vs 짬뽕"
+    function decide(input, randomInt) {
+      return decideParsed(input, parseChoices(input), randomInt);
+    }
+
+    // 두 칸 입력: 화면이 쓰는 방식
+    function decidePair(first, second, randomInt) {
+      // 공백으로 이으면 필터가 공백을 지운 뒤 칸 경계를 넘어 오탐한다 ("예약" + "먹방" → "약먹").
+      var safetyText = String(first || "") + " / " + String(second || "");
+      return decideParsed(safetyText, parsePair(first, second), randomInt);
     }
 
     // ─────────────────────────────────────────────
@@ -819,8 +891,10 @@
       SAFETY_MESSAGES: SAFETY_MESSAGES,
       cryptoRandomInt: cryptoRandomInt,
       parseChoices: parseChoices,
+      parsePair: parsePair,
       checkSafety: checkSafety,
       decide: decide,
+      decidePair: decidePair,
       withParticle: withParticle,
       fillTemplate: fillTemplate,
       pickLineIndex: pickLineIndex
@@ -839,7 +913,8 @@
     var CRYPTO_ERROR_MESSAGE = "이 브라우저에서는 공정한 추첨을 할 수 없어요. 최신 브라우저로 열어 주세요.";
 
     var form = document.getElementById("pick-form");
-    var input = document.getElementById("pick-input");
+    var inputA = document.getElementById("choice-a");
+    var inputB = document.getElementById("choice-b");
     var pickButton = document.getElementById("pick-button");
     var notice = document.getElementById("notice");
     var safety = document.getElementById("safety");
@@ -861,7 +936,7 @@
 
     var state = {
       rolling: false,
-      lastInput: "",
+      lastPair: ["", ""],
       lastDecision: null,
       lastLineIndex: -1,
       lastLikeIndex: -1
@@ -897,7 +972,7 @@
       againNew.disabled = busy;
     }
 
-    function run(rawInput) {
+    function run(first, second) {
       if (state.rolling) {
         return;
       }
@@ -906,7 +981,7 @@
 
       var decision;
       try {
-        decision = PickCore.decide(rawInput);
+        decision = PickCore.decidePair(first, second);
       } catch (error) {
         showNotice(CRYPTO_ERROR_MESSAGE);
         return;
@@ -922,12 +997,18 @@
         return;
       }
 
-      state.lastInput = rawInput;
+      if (decision.split) {
+        // 한 칸에 "짜장 vs 짬뽕"을 붙여 넣은 경우 두 칸으로 나눠 보여준다.
+        inputA.value = decision.choices[0];
+        inputB.value = decision.choices[1];
+      }
+
+      state.lastPair = [decision.choices[0], decision.choices[1]];
       state.lastDecision = decision;
 
-      if (coarsePointer.matches) {
+      if (coarsePointer.matches && document.activeElement) {
         // 모바일 키보드를 내려서 결과가 가려지지 않게 한다.
-        input.blur();
+        document.activeElement.blur();
       }
 
       roll(decision);
@@ -998,11 +1079,29 @@
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
-      run(input.value);
+      run(inputA.value, inputB.value);
     });
 
-    input.addEventListener("input", function () {
-      notice.hidden = true;
+    // 첫 칸에서 Enter: 둘째 칸이 비어 있으면 둘째 칸으로 넘어간다.
+    // 단, 첫 칸에 "짜장 vs 짬뽕"처럼 둘을 다 적었으면 바로 고른다.
+    inputA.addEventListener("keydown", function (event) {
+      if (event.key !== "Enter" || event.isComposing) {
+        return;
+      }
+
+      var secondIsEmpty = inputB.value.trim() === "";
+      var firstHasBoth = PickCore.parseChoices(inputA.value).ok;
+
+      if (secondIsEmpty && !firstHasBoth) {
+        event.preventDefault();
+        inputB.focus();
+      }
+    });
+
+    [inputA, inputB].forEach(function (field) {
+      field.addEventListener("input", function () {
+        notice.hidden = true;
+      });
     });
 
     reactLike.addEventListener("click", function () {
@@ -1028,14 +1127,15 @@
     });
 
     againSame.addEventListener("click", function () {
-      run(state.lastInput);
+      run(state.lastPair[0], state.lastPair[1]);
     });
 
     againNew.addEventListener("click", function () {
       clearOutputs();
-      input.value = "";
+      inputA.value = "";
+      inputB.value = "";
       state.lastDecision = null;
-      input.focus();
+      inputA.focus();
     });
   })();
   </script>

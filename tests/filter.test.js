@@ -82,6 +82,32 @@ test("평범한 입력은 필터에 걸리지 않고 정상 추첨된다", () =>
   }
 });
 
+test("두 칸 입력에서도 어느 칸이든 걸리면 추첨하지 않는다", () => {
+  const cases = [
+    ["약 먹기", "참기", "health"],
+    ["버티기", "수술 받기", "health"],
+    ["죽고 싶다", "참자", "selfHarm"]
+  ];
+
+  for (const [first, second, kind] of cases) {
+    const draw = spyDraw();
+    const decision = plain(core.decidePair(first, second, draw));
+
+    assert.equal(decision.status, "safety", `${first} / ${second}`);
+    assert.equal(decision.kind, kind);
+    assert.equal(draw.calls, 0);
+  }
+});
+
+test("두 칸의 글자가 이어 붙어 생기는 오탐은 없다", () => {
+  // "예약" + "먹방"을 공백 없이 이으면 "약먹"이 생긴다.
+  const draw = spyDraw();
+  const decision = plain(core.decidePair("예약", "먹방", draw));
+
+  assert.equal(decision.status, "picked");
+  assert.equal(draw.calls, 1);
+});
+
 test("키워드 목록은 상수로 노출되어 있고 비어 있지 않다", () => {
   assert.ok(core.HEALTH_KEYWORDS.length > 0);
   assert.ok(core.SELF_HARM_KEYWORDS.length > 0);

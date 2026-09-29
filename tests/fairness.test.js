@@ -4,12 +4,12 @@ const { loadCore } = require("./load-core");
 
 const RUNS = 100000;
 
-test(`추첨 ${RUNS.toLocaleString("en-US")}회: 한쪽 비율이 49%–51% 안에 든다`, () => {
+test(`두 칸 입력 추첨 ${RUNS.toLocaleString("en-US")}회: 한쪽 비율이 49%–51% 안에 든다`, () => {
   const core = loadCore();
   let first = 0;
 
   for (let i = 0; i < RUNS; i += 1) {
-    const decision = core.decide("짜장 vs 짬뽕");
+    const decision = core.decidePair("짜장", "짬뽕");
     if (decision.picked === "짜장") {
       first += 1;
     }
@@ -19,7 +19,7 @@ test(`추첨 ${RUNS.toLocaleString("en-US")}회: 한쪽 비율이 49%–51% 안�
   assert.ok(ratio >= 0.49 && ratio <= 0.51, `짜장 비율 ${(ratio * 100).toFixed(2)}%`);
 });
 
-test("입력 순서를 바꿔도 앞쪽에 쏠리지 않는다", () => {
+test("한 줄 입력, 순서를 바꿔도 앞쪽에 쏠리지 않는다", () => {
   const core = loadCore();
   let first = 0;
 
