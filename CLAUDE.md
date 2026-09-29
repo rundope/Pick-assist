@@ -35,8 +35,10 @@ The Spoon Lab "~assist" 제품군(Workflow-assist, Densi-assist, Stat-assist)의
 ## 테스트
 
 ```sh
-node --test tests/
+node --test tests/*.test.js
 ```
 
 - Node.js 18 이상이면 추가 설치 없이 돈다.
+- `node --test tests/`처럼 디렉터리만 넘기면 Node.js 22에서는 파일 경로로 해석되어 실패한다. 위처럼 glob으로 넘긴다.
+- `tests/load-core.js`가 `index.html`의 `pick-core` 블록을 그대로 읽어 실행한다. 앱 코드를 테스트에 복사하지 않는다.
 - 파싱, 공정성(100,000회 추첨 시 49%–51%), 건강·안전 필터(추첨 함수가 호출되지 않음), 문구 풀 크기를 확인한다.
