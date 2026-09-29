@@ -14,12 +14,13 @@ _Screenshot coming soon._
 
 ## How to use
 
-1. Type two options in one line, e.g. `짜장 vs 짬뽕`.
-   Separators: `vs`, `VS`, `Vs`, `/`, `아니면`, `or`.
-2. Press **골라줘** (or hit Enter). After a short roll, you get the pick and one decisive line.
+1. Type one option in each field, e.g. `짜장` and `짬뽕`.
+   Enter in the first field jumps to the second. Pasting `짜장 vs 짬뽕` into one field
+   also works (separators: `vs`, `VS`, `Vs`, `/`, `아니면`, `or`).
+2. Press **골라줘** (or hit Enter). After a short gavel swing, you get the verdict and one decisive line.
 3. Optionally react with **좋아** or **아… 다른 거**. If you wanted the other one,
    the answer was already in you — go with it.
-4. Press **한 번 더** to draw again with the same input, or **새로 입력** to start over.
+4. Press **다시 판결** to draw again with the same options, or **새로 입력** to start over.
 
 ## Promises
 
@@ -61,12 +62,13 @@ _스크린샷 준비 중._
 
 ## 사용법
 
-1. 입력칸에 두 선택지를 한 줄로 적습니다. 예: `짜장 vs 짬뽕`
-   구분자: `vs`, `VS`, `Vs`, `/`, `아니면`, `or`
-2. **골라줘**를 누르거나 Enter를 칩니다. 짧은 연출 뒤에 결과와 단호한 한 문장이 나옵니다.
+1. 두 입력칸에 선택지를 하나씩 적습니다. 예: `짜장`, `짬뽕`
+   첫 칸에서 Enter를 치면 둘째 칸으로 넘어갑니다. 한 칸에 `짜장 vs 짬뽕`처럼 붙여 넣어도
+   알아서 나눕니다 (구분자: `vs`, `VS`, `Vs`, `/`, `아니면`, `or`).
+2. **골라줘**를 누르거나 Enter를 칩니다. 의사봉 연출 뒤에 판결과 단호한 한 문장이 나옵니다.
 3. 원하면 **좋아** 또는 **아… 다른 거**를 누릅니다. 다른 쪽이 아쉬웠다면
    답은 이미 정해져 있었던 겁니다. 그쪽으로 가세요.
-4. **한 번 더**는 같은 입력으로 다시 고르고, **새로 입력**은 처음부터 시작합니다.
+4. **다시 판결**은 같은 선택지로 다시 고르고, **새로 입력**은 처음부터 시작합니다.
 
 ## 약속
 
