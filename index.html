@@ -114,6 +114,30 @@
       min-height: 100dvh;
     }
 
+    /* ── 언어 전환 ── */
+
+    .app {
+      position: relative;
+    }
+
+    .lang-toggle {
+      position: absolute;
+      top: calc(16px + env(safe-area-inset-top));
+      right: calc(16px + env(safe-area-inset-right));
+      min-height: 36px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .lang-toggle:disabled {
+      opacity: 0.5;
+    }
+
     /* ── 머리: 법정 문장(紋章)처럼 가운데 정렬 ── */
 
     .brand {
@@ -341,11 +365,17 @@
       margin: 0;
     }
 
+    .call-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
     .call-link {
       display: inline-flex;
       align-items: center;
       min-height: 44px;
-      margin-top: 12px;
       padding: 0 18px;
       border-radius: 999px;
       background: var(--text);
@@ -598,6 +628,9 @@
 </head>
 <body>
   <main class="app">
+    <!-- 언어 전환. 선택은 저장하지 않고 주소의 ?lang= 로만 남긴다 (데이터 저장 없음 원칙). -->
+    <button id="lang-toggle" class="lang-toggle" type="button" lang="en" aria-label="Switch to English">English</button>
+
     <header class="brand">
       <!-- Spoonbills 로고 (저장소에 받은 이미지를 벡터로 옮김). 색은 테마를 따른다. -->
       <svg class="logo" viewBox="0 0 363 320" aria-hidden="true">
@@ -619,14 +652,14 @@
     <!-- 슬로건 원문: "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유"
          줄바꿈 위치를 고정하려고 두 줄로 나누고, 이음표(-)는 화면에서만 숨긴다. -->
     <h1 class="slogan">
-      <span class="slogan-main">망설이지 마세요</span><span class="visually-hidden"> - </span>
-      <span class="slogan-sub">판결은 Pick-assist 에게, 선택은 자유</span>
+      <span class="slogan-main" data-i18n="sloganMain">망설이지 마세요</span><span class="visually-hidden" data-i18n="sloganDash"> - </span>
+      <span class="slogan-sub" data-i18n="sloganSub">판결은 Pick-assist 에게, 선택은 자유</span>
     </h1>
-    <p class="lede">두 선택지를 올리면, 공정하게 판결합니다.</p>
+    <p class="lede" data-i18n="lede">두 선택지를 올리면, 공정하게 판결합니다.</p>
 
     <form id="pick-form" class="form" autocomplete="off" novalidate>
       <div class="fields">
-        <label for="choice-a" class="visually-hidden">첫 번째 선택지</label>
+        <label for="choice-a" class="visually-hidden" data-i18n="labelA">첫 번째 선택지</label>
         <input
           id="choice-a"
           class="input"
@@ -639,7 +672,7 @@
           spellcheck="false"
         >
         <span class="versus" aria-hidden="true">VS</span>
-        <label for="choice-b" class="visually-hidden">두 번째 선택지</label>
+        <label for="choice-b" class="visually-hidden" data-i18n="labelB">두 번째 선택지</label>
         <input
           id="choice-b"
           class="input"
@@ -664,7 +697,7 @@
             <rect x="1" y="27" width="14" height="3.5" rx="1.2"></rect>
           </g>
         </svg>
-        <span>골라줘</span>
+        <span data-i18n="pick">골라줘</span>
       </button>
     </form>
 
@@ -672,7 +705,12 @@
 
     <div id="safety" class="safety" role="alert" hidden>
       <p id="safety-message"></p>
-      <a id="safety-call" class="call-link" href="tel:109" hidden>109에 전화하기</a>
+      <!-- 자해·자살 안내에서만 보인다. 영어 화면은 109와 함께 미국·영국 번호도 보여준다. -->
+      <div id="safety-calls" class="call-links" hidden>
+        <a class="call-link" href="tel:109" data-i18n="call109">109에 전화하기</a>
+        <a class="call-link" href="tel:988" data-i18n="call988" data-lang-only="en" hidden>Call or text 988 (US)</a>
+        <a class="call-link" href="tel:116123" data-i18n="call116" data-lang-only="en" hidden>Call 116 123 (UK &amp; IE)</a>
+      </div>
     </div>
 
     <section id="result" class="result" aria-live="polite" hidden>
@@ -688,27 +726,27 @@
             <rect x="1" y="27" width="14" height="3.5" rx="1.2"></rect>
           </g>
         </svg>
-        <span>판결</span>
+        <span data-i18n="verdict">판결</span>
       </p>
       <p id="picked" class="picked"></p>
       <p id="line" class="line"></p>
       <p id="verdict-date" class="verdict-date"></p>
 
       <div id="reactions" class="reactions" hidden>
-        <button id="react-like" class="chip" type="button">좋아</button>
-        <button id="react-other" class="chip" type="button">아… 다른 거</button>
+        <button id="react-like" class="chip" type="button" data-i18n="like">좋아</button>
+        <button id="react-other" class="chip" type="button" data-i18n="other">아… 다른 거</button>
       </div>
       <p id="reply" class="reply" hidden></p>
 
       <div id="again" class="again" hidden>
-        <button id="again-same" type="button">다시 판결</button>
-        <button id="again-new" type="button">새로 입력</button>
+        <button id="again-same" type="button" data-i18n="again">다시 판결</button>
+        <button id="again-new" type="button" data-i18n="reset">새로 입력</button>
       </div>
     </section>
 
     <footer class="footer">
       <!-- 사실과 맞아야 한다: 서버·저장·전송이 없고 CSP가 외부 요청을 막는다. -->
-      <p>이 법정은 철저한 비공개 재판입니다.<br>사건도 판결도 이 기기 밖으로 새지 않아요.</p>
+      <p><span data-i18n="footer1">이 법정은 철저한 비공개 재판입니다.</span><br><span data-i18n="footer2">사건도 판결도 이 기기 밖으로 새지 않아요.</span></p>
       <p>Spoonbills</p>
     </footer>
   </main>
@@ -1331,7 +1369,60 @@
     var ROLL_DURATION_MS = 700;
     var ROLL_STEP_MS = 90;
     var REDUCED_ROLL_DURATION_MS = 500;
-    var CRYPTO_ERROR_MESSAGE = "이 브라우저에서는 공정한 추첨을 할 수 없어요. 최신 브라우저로 열어 주세요.";
+
+    // 화면 글자 (언어별). 결과·안내 문구는 PickCore.COPY에 있다.
+    var STRINGS = {
+      ko: {
+        title: "Pick-assist — 망설이지 마세요",
+        sloganMain: "망설이지 마세요",
+        sloganDash: " - ",
+        sloganSub: "판결은 Pick-assist 에게, 선택은 자유",
+        lede: "두 선택지를 올리면, 공정하게 판결합니다.",
+        labelA: "첫 번째 선택지",
+        labelB: "두 번째 선택지",
+        pick: "골라줘",
+        call109: "109에 전화하기",
+        call988: "Call or text 988 (US)",
+        call116: "Call 116 123 (UK & IE)",
+        verdict: "판결",
+        deliberating: "심리 중…",
+        like: "좋아",
+        other: "아… 다른 거",
+        again: "다시 판결",
+        reset: "새로 입력",
+        footer1: "이 법정은 철저한 비공개 재판입니다.",
+        footer2: "사건도 판결도 이 기기 밖으로 새지 않아요.",
+        cryptoError: "이 브라우저에서는 공정한 추첨을 할 수 없어요. 최신 브라우저로 열어 주세요.",
+        switchTo: "English",
+        switchToLang: "en",
+        switchLabel: "Switch to English"
+      },
+      en: {
+        title: "Pick-assist — Don't hesitate",
+        sloganMain: "Don't hesitate",
+        sloganDash: " — ",
+        sloganSub: "Leave the verdict to Pick-assist; the choice is still yours.",
+        lede: "Submit two options, and the court rules fairly.",
+        labelA: "First option",
+        labelB: "Second option",
+        pick: "Pick for me",
+        call109: "Call 109 (Korea)",
+        call988: "Call or text 988 (US)",
+        call116: "Call 116 123 (UK & IE)",
+        verdict: "Verdict",
+        deliberating: "Deliberating…",
+        like: "Good",
+        other: "Hmm… the other one",
+        again: "Rule again",
+        reset: "New case",
+        footer1: "This court holds closed hearings.",
+        footer2: "Neither the case nor the verdict leaves this device.",
+        cryptoError: "This browser can't make a fair draw. Please open the page in an up-to-date browser.",
+        switchTo: "한국어",
+        switchToLang: "ko",
+        switchLabel: "한국어로 보기"
+      }
+    };
 
     var form = document.getElementById("pick-form");
     var inputA = document.getElementById("choice-a");
@@ -1340,7 +1431,6 @@
     var notice = document.getElementById("notice");
     var safety = document.getElementById("safety");
     var safetyMessage = document.getElementById("safety-message");
-    var safetyCall = document.getElementById("safety-call");
     var result = document.getElementById("result");
     var pickedText = document.getElementById("picked");
     var verdictDate = document.getElementById("verdict-date");
@@ -1350,6 +1440,8 @@
     var reactOther = document.getElementById("react-other");
     var reply = document.getElementById("reply");
     var again = document.getElementById("again");
+    var langToggle = document.getElementById("lang-toggle");
+    var safetyCalls = document.getElementById("safety-calls");
     var againSame = document.getElementById("again-same");
     var againNew = document.getElementById("again-new");
 
@@ -1357,6 +1449,7 @@
     var coarsePointer = window.matchMedia("(pointer: coarse)");
 
     var state = {
+      lang: PickCore.DEFAULT_LANG,
       rolling: false,
       lastPair: ["", ""],
       lastDecision: null,
@@ -1367,7 +1460,7 @@
     function clearOutputs() {
       notice.hidden = true;
       safety.hidden = true;
-      safetyCall.hidden = true;
+      safetyCalls.hidden = true;
       safety.classList.remove("is-care");
       result.hidden = true;
       reply.hidden = true;
@@ -1382,7 +1475,7 @@
       safetyMessage.textContent = decision.message;
 
       var isSelfHarm = decision.kind === "selfHarm";
-      safetyCall.hidden = !isSelfHarm;
+      safetyCalls.hidden = !isSelfHarm;
       safety.classList.toggle("is-care", isSelfHarm);
       safety.hidden = false;
     }
@@ -1392,6 +1485,7 @@
       pickButton.disabled = busy;
       againSame.disabled = busy;
       againNew.disabled = busy;
+      langToggle.disabled = busy;
     }
 
     function run(first, second) {
@@ -1403,9 +1497,9 @@
 
       var decision;
       try {
-        decision = PickCore.decidePair(first, second);
+        decision = PickCore.decidePair(first, second, null, state.lang);
       } catch (error) {
-        showNotice(CRYPTO_ERROR_MESSAGE);
+        showNotice(t("cryptoError"));
         return;
       }
 
@@ -1444,7 +1538,7 @@
       result.classList.add("is-rolling");
       reactions.hidden = true;
       again.hidden = true;
-      lineText.textContent = "심리 중…";
+      lineText.textContent = t("deliberating");
       verdictDate.textContent = "";
       pickedText.textContent = decision.choices[0];
       result.hidden = false;
@@ -1470,25 +1564,36 @@
       }, ROLL_DURATION_MS);
     }
 
-    // 판결문 아래 "2026. 9. 29. 선고" (기기 시계 기준)
+    // 판결문 아래 날짜 (기기 시계 기준). 한국어 "2026. 9. 29. 선고", 영어 "Ruled Oct 3, 2026"
+    var MONTHS_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
     function formatVerdictDate(date) {
+      if (state.lang === "en") {
+        return "Ruled " + MONTHS_EN[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+      }
       return date.getFullYear() + ". " + (date.getMonth() + 1) + ". " + date.getDate() + ". 선고";
     }
 
+    // 결과 문구와 날짜를 현재 언어로 쓴다. 언어를 바꿀 때도 다시 부른다.
+    function renderVerdictText(decision) {
+      var lines = PickCore.copyFor(state.lang).resultLines;
+      lineText.textContent = PickCore.fillTemplate(lines[state.lastLineIndex], decision);
+      verdictDate.textContent = formatVerdictDate(new Date());
+    }
+
     function reveal(decision) {
-      var lines = PickCore.copyFor("ko").resultLines;
+      var count = PickCore.copyFor(state.lang).resultLines.length;
       var lineIndex;
 
       try {
-        lineIndex = PickCore.pickLineIndex(lines.length, null, state.lastLineIndex);
+        lineIndex = PickCore.pickLineIndex(count, null, state.lastLineIndex);
       } catch (error) {
         lineIndex = 0;
       }
       state.lastLineIndex = lineIndex;
 
       pickedText.textContent = decision.picked;
-      lineText.textContent = PickCore.fillTemplate(lines[lineIndex], decision);
-      verdictDate.textContent = formatVerdictDate(new Date());
+      renderVerdictText(decision);
 
       result.classList.remove("is-rolling");
       // 애니메이션을 다시 걸기 위해 레이아웃을 한 번 읽는다.
@@ -1534,7 +1639,7 @@
     });
 
     reactLike.addEventListener("click", function () {
-      var lines = PickCore.copyFor("ko").likeLines;
+      var lines = PickCore.copyFor(state.lang).likeLines;
       var index;
 
       try {
@@ -1552,7 +1657,7 @@
       if (!state.lastDecision) {
         return;
       }
-      showReply(PickCore.fillTemplate(PickCore.copyFor("ko").otherLine, state.lastDecision));
+      showReply(PickCore.fillTemplate(PickCore.copyFor(state.lang).otherLine, state.lastDecision));
     });
 
     againSame.addEventListener("click", function () {
@@ -1566,6 +1671,77 @@
       state.lastDecision = null;
       inputA.focus();
     });
+
+    // ── 언어 ──
+
+    function t(key) {
+      return STRINGS[state.lang][key];
+    }
+
+    // 주소의 ?lang= 이 먼저, 없으면 브라우저 첫 번째 언어가 한국어인지로 정한다.
+    function detectLang() {
+      var param = "";
+      try {
+        param = new URLSearchParams(window.location.search).get("lang") || "";
+      } catch (error) {
+        param = "";
+      }
+      if (STRINGS[param]) {
+        return param;
+      }
+
+      var preferred = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+      return preferred.toLowerCase().indexOf("ko") === 0 ? "ko" : "en";
+    }
+
+    function applyLang(lang) {
+      state.lang = STRINGS[lang] ? lang : PickCore.DEFAULT_LANG;
+
+      document.documentElement.lang = state.lang;
+      document.title = t("title");
+
+      Array.prototype.forEach.call(document.querySelectorAll("[data-i18n]"), function (element) {
+        element.textContent = t(element.getAttribute("data-i18n"));
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-lang-only]"), function (element) {
+        element.hidden = element.getAttribute("data-lang-only") !== state.lang;
+      });
+
+      langToggle.textContent = t("switchTo");
+      langToggle.lang = t("switchToLang");
+      langToggle.setAttribute("aria-label", t("switchLabel"));
+
+      // 화면에 남은 안내는 언어가 섞이지 않게 닫는다. 판결은 새 언어로 다시 쓴다.
+      notice.hidden = true;
+      safety.hidden = true;
+      reply.hidden = true;
+      if (state.lastDecision && !result.hidden) {
+        renderVerdictText(state.lastDecision);
+        reactions.hidden = false;
+      }
+    }
+
+    // 링크를 공유하면 같은 언어로 열리도록 주소만 바꾼다. 저장은 하지 않는다.
+    function rememberLangInUrl(lang) {
+      try {
+        var url = new URL(window.location.href);
+        url.searchParams.set("lang", lang);
+        window.history.replaceState(null, "", url.toString());
+      } catch (error) {
+        // file:// 등에서 막히면 주소는 그대로 둔다. 화면 전환에는 영향이 없다.
+      }
+    }
+
+    langToggle.addEventListener("click", function () {
+      if (state.rolling) {
+        return;
+      }
+      var next = t("switchToLang");
+      applyLang(next);
+      rememberLangInUrl(next);
+    });
+
+    applyLang(detectLang());
   })();
   </script>
 </body>
