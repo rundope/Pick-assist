@@ -23,7 +23,11 @@ Spoonbills "~assist" 제품군(Workflow-assist, Densi-assist, Stat-assist)의 �
 - 사용자에게 보여주는 메시지와 Pull Request(PR) 설명에서 git·GitHub 약어는 풀네임과 함께 쓴다. 예: Pull Request(PR).
 - 사용자가 "퇴근"이라고 하면 `wrap-up` 스킬을, "출근"이라고 하면 `start-work` 스킬을 실행한다.
 - 새 세션은 대화 기록을 모른다. 이어서 할 정보는 반드시 `HANDOFF.md`에 남긴다.
-- merge는 사용자가 한다. 직접 merge하지 않는다.
+- merge는 기본적으로 사용자가 한다. 사용자가 명시적으로 merge를 요청한 Pull Request(PR)만 Claude가 merge한다.
+  - merge 전에 확인한다: 충돌이 없는지(mergeable clean), 원격 branch가 로컬과 같은 commit인지, `tests/`가 모두 통과하는지.
+  - 마지막 commit SHA를 지정해 merge한다 (그 사이 다른 변경이 끼면 거부되게). 방식은 merge commit이다 (squash 금지, commit 기록 유지).
+  - merge 뒤 GitHub Pages 배포("pages build and deployment")가 성공했는지 확인해 알린다.
+  - 요청은 그 Pull Request(PR) 한 건에만 적용된다. 다음 Pull Request(PR)는 다시 요청을 받아야 merge한다.
 
 ## 구조와 기술 조건
 
