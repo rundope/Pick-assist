@@ -421,6 +421,13 @@
       text-indent: 0.5em;
     }
 
+    /* 한국어 "판 결"용 넓은 자간은 영어 단어를 흩어 놓으므로, 영어는 대문자로 좁게 쓴다. */
+    :lang(en) .result-head {
+      letter-spacing: 0.22em;
+      text-indent: 0.22em;
+      text-transform: uppercase;
+    }
+
     .gavel {
       width: 30px;
       height: 30px;
