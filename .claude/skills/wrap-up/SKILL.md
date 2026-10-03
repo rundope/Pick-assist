@@ -9,4 +9,4 @@ description: 사용자가 "퇴근", "마무리", "오늘 여기까지"라고 하
 4. 남은 변경을 commit하고 push한다.
 5. Pull Request(PR)를 만들거나, 이미 있으면 설명을 갱신한다. 제목은 오늘 작업 요약, 본문은 HANDOFF.md의 요약과 확인 방법.
 6. 사용자에게 다섯 줄 이내로 알린다: 오늘 한 일, 테스트 결과, Pull Request(PR) 링크, "merge하면 다른 기기에서 이어갈 수 있습니다".
-7. merge는 사용자가 한다. 직접 merge하지 않는다.
+7. merge는 기본적으로 사용자가 한다. 사용자가 이 Pull Request(PR)의 merge를 명시적으로 요청했을 때만, CLAUDE.md의 merge 확인 절차를 거쳐 Claude가 merge한다.
