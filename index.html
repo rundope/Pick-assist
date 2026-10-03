@@ -114,6 +114,30 @@
       min-height: 100dvh;
     }
 
+    /* ── 언어 전환 ── */
+
+    .app {
+      position: relative;
+    }
+
+    .lang-toggle {
+      position: absolute;
+      top: calc(16px + env(safe-area-inset-top));
+      right: calc(16px + env(safe-area-inset-right));
+      min-height: 36px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .lang-toggle:disabled {
+      opacity: 0.5;
+    }
+
     /* ── 머리: 법정 문장(紋章)처럼 가운데 정렬 ── */
 
     .brand {
@@ -341,11 +365,17 @@
       margin: 0;
     }
 
+    .call-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
     .call-link {
       display: inline-flex;
       align-items: center;
       min-height: 44px;
-      margin-top: 12px;
       padding: 0 18px;
       border-radius: 999px;
       background: var(--text);
@@ -389,6 +419,13 @@
       font-weight: 800;
       letter-spacing: 0.5em;
       text-indent: 0.5em;
+    }
+
+    /* 한국어 "판 결"용 넓은 자간은 영어 단어를 흩어 놓으므로, 영어는 대문자로 좁게 쓴다. */
+    :lang(en) .result-head {
+      letter-spacing: 0.22em;
+      text-indent: 0.22em;
+      text-transform: uppercase;
     }
 
     .gavel {
@@ -598,6 +635,9 @@
 </head>
 <body>
   <main class="app">
+    <!-- 언어 전환. 선택은 저장하지 않고 주소의 ?lang= 로만 남긴다 (데이터 저장 없음 원칙). -->
+    <button id="lang-toggle" class="lang-toggle" type="button" lang="en" aria-label="Switch to English">English</button>
+
     <header class="brand">
       <!-- Spoonbills 로고 (저장소에 받은 이미지를 벡터로 옮김). 색은 테마를 따른다. -->
       <svg class="logo" viewBox="0 0 363 320" aria-hidden="true">
@@ -619,14 +659,14 @@
     <!-- 슬로건 원문: "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유"
          줄바꿈 위치를 고정하려고 두 줄로 나누고, 이음표(-)는 화면에서만 숨긴다. -->
     <h1 class="slogan">
-      <span class="slogan-main">망설이지 마세요</span><span class="visually-hidden"> - </span>
-      <span class="slogan-sub">판결은 Pick-assist 에게, 선택은 자유</span>
+      <span class="slogan-main" data-i18n="sloganMain">망설이지 마세요</span><span class="visually-hidden" data-i18n="sloganDash"> - </span>
+      <span class="slogan-sub" data-i18n="sloganSub">판결은 Pick-assist 에게, 선택은 자유</span>
     </h1>
-    <p class="lede">두 선택지를 올리면, 공정하게 판결합니다.</p>
+    <p class="lede" data-i18n="lede">두 선택지를 올리면, 공정하게 판결합니다.</p>
 
     <form id="pick-form" class="form" autocomplete="off" novalidate>
       <div class="fields">
-        <label for="choice-a" class="visually-hidden">첫 번째 선택지</label>
+        <label for="choice-a" class="visually-hidden" data-i18n="labelA">첫 번째 선택지</label>
         <input
           id="choice-a"
           class="input"
@@ -639,7 +679,7 @@
           spellcheck="false"
         >
         <span class="versus" aria-hidden="true">VS</span>
-        <label for="choice-b" class="visually-hidden">두 번째 선택지</label>
+        <label for="choice-b" class="visually-hidden" data-i18n="labelB">두 번째 선택지</label>
         <input
           id="choice-b"
           class="input"
@@ -664,7 +704,7 @@
             <rect x="1" y="27" width="14" height="3.5" rx="1.2"></rect>
           </g>
         </svg>
-        <span>골라줘</span>
+        <span data-i18n="pick">골라줘</span>
       </button>
     </form>
 
@@ -672,7 +712,12 @@
 
     <div id="safety" class="safety" role="alert" hidden>
       <p id="safety-message"></p>
-      <a id="safety-call" class="call-link" href="tel:109" hidden>109에 전화하기</a>
+      <!-- 자해·자살 안내에서만 보인다. 영어 화면은 109와 함께 미국·영국 번호도 보여준다. -->
+      <div id="safety-calls" class="call-links" hidden>
+        <a class="call-link" href="tel:109" data-i18n="call109">109에 전화하기</a>
+        <a class="call-link" href="tel:988" data-i18n="call988" data-lang-only="en" hidden>Call or text 988 (US)</a>
+        <a class="call-link" href="tel:116123" data-i18n="call116" data-lang-only="en" hidden>Call 116 123 (UK &amp; IE)</a>
+      </div>
     </div>
 
     <section id="result" class="result" aria-live="polite" hidden>
@@ -688,27 +733,27 @@
             <rect x="1" y="27" width="14" height="3.5" rx="1.2"></rect>
           </g>
         </svg>
-        <span>판결</span>
+        <span data-i18n="verdict">판결</span>
       </p>
       <p id="picked" class="picked"></p>
       <p id="line" class="line"></p>
       <p id="verdict-date" class="verdict-date"></p>
 
       <div id="reactions" class="reactions" hidden>
-        <button id="react-like" class="chip" type="button">좋아</button>
-        <button id="react-other" class="chip" type="button">아… 다른 거</button>
+        <button id="react-like" class="chip" type="button" data-i18n="like">좋아</button>
+        <button id="react-other" class="chip" type="button" data-i18n="other">아… 다른 거</button>
       </div>
       <p id="reply" class="reply" hidden></p>
 
       <div id="again" class="again" hidden>
-        <button id="again-same" type="button">다시 판결</button>
-        <button id="again-new" type="button">새로 입력</button>
+        <button id="again-same" type="button" data-i18n="again">다시 판결</button>
+        <button id="again-new" type="button" data-i18n="reset">새로 입력</button>
       </div>
     </section>
 
     <footer class="footer">
       <!-- 사실과 맞아야 한다: 서버·저장·전송이 없고 CSP가 외부 요청을 막는다. -->
-      <p>이 법정은 철저한 비공개 재판입니다.<br>사건도 판결도 이 기기 밖으로 새지 않아요.</p>
+      <p><span data-i18n="footer1">이 법정은 철저한 비공개 재판입니다.</span><br><span data-i18n="footer2">사건도 판결도 이 기기 밖으로 새지 않아요.</span></p>
       <p>Spoonbills</p>
     </footer>
   </main>
@@ -724,14 +769,18 @@
 
     // ─────────────────────────────────────────────
     // 건강·안전 키워드
-    // 비교할 때 입력과 키워드 모두 공백을 지우고 소문자로 바꾼다.
-    // 그래서 "죽고 싶"은 "죽고싶"도 잡는다.
+    // 한국어 키워드: 입력과 키워드 모두 공백을 지우고 비교한다.
+    //   그래서 "죽고 싶"은 "죽고싶"도 잡는다.
+    // 영어(ASCII) 키워드: 소문자로 바꾸고, 단어가 시작하는 위치에서만 맞춘다.
+    //   공백을 지우면 "spend my life"가 "end my life"에 걸리기 때문이다.
+    //   단어 끝은 열어 두어서 "pregnan"은 pregnant·pregnancy를 모두 잡는다.
     // 짧은 단어는 오탐이 많으니 넣기 전에 일상 표현과 겹치는지 확인할 것.
     //   예: "주사"는 "주사위"와 겹쳐서 "주사 맞", "주사를"로 쓴다.
     //   예: "약" 단독은 "약속", "예약"과 겹쳐서 쓰지 않는다.
     //   예: "마약"은 "마약떡볶이"와, "대마"는 "대마도"와 겹쳐서 행동·명사 형태로 쓴다.
     //   예: "끝내버릴까"는 "숙제 끝내버릴까"와 구분이 안 돼서 넣지 않는다.
-    // 알려진 오탐: "수술실 드라마"처럼 의료 단어가 들어간 일상 선택. 안전 쪽으로 둔다.
+    //   예: "medicine"은 "medicine ball"과 겹쳐서 "take medicine" 형태로 쓴다.
+    // 알려진 오탐: "수술실 드라마", "Suicide Squad"처럼 해당 단어가 들어간 일상 선택. 안전 쪽으로 둔다.
     // ─────────────────────────────────────────────
 
     // 자해·자살 표현 → 추첨하지 않고 자살예방 상담전화 109 안내
@@ -765,9 +814,19 @@
       "사라지고 싶",
       "살기 싫",
       "suicide",
+      "suicidal",
       "kill myself",
+      "killing myself",
       "self harm",
-      "self-harm"
+      "self-harm",
+      "end my life",
+      "take my own life",
+      "cut myself",
+      "hang myself",
+      "overdose",
+      "better off dead",
+      "don't want to live",
+      "dont want to live"
     ];
 
     // 건강·안전 표현 → 추첨하지 않고 "전문가와 상의하세요"
@@ -841,8 +900,39 @@
       "술 먹고 운전",
       "술 마시고 운전",
       "medication",
+      "take medicine",
+      "take my medicine",
+      "prescription",
+      "pills",
+      "dosage",
+      "painkiller",
+      "sleeping pill",
+      "antidepressant",
+      "antibiotic",
+      "insulin",
+      "steroid",
+      "stop treatment",
+      "stop my treatment",
       "surgery",
-      "chemo"
+      "chemo",
+      "to the hospital",
+      "in the hospital",
+      "hospitalized",
+      "emergency room",
+      "see a doctor",
+      "go to the doctor",
+      "dentist",
+      "vaccine",
+      "pregnan",
+      "abortion",
+      "dialysis",
+      "lasik",
+      "botox",
+      "drunk driving",
+      "drive drunk",
+      "drink and drive",
+      "without a helmet",
+      "without a seatbelt"
     ];
 
     // ─────────────────────────────────────────────
@@ -856,68 +946,129 @@
     var SPLIT_MARK = "\u0000";
 
     // ─────────────────────────────────────────────
-    // 문구
+    // 문구 (언어별)
     // {c} = 고른 쪽, {o} = 고르지 않은 쪽.
-    // {c:으로} 처럼 쓰면 받침에 맞춰 조사를 붙인다.
-    // 지원 조사: 으로, 은, 이, 을, 과
+    // 한국어는 {c:으로} 처럼 쓰면 받침에 맞춰 조사를 붙인다 (지원: 으로, 은, 이, 을, 과).
+    // 목소리: 망설임 없이 판결을 내리는 판사. 짧고 단호하게. "떠먹여 준다"(spoon-feed)류 표현은 쓰지 않는다.
+    // 선택지가 음식이 아닐 수도 있으니 "드세요"(eat) 같은 먹는 동사는 피한다.
+    // 두 언어의 문구 풀은 같은 역할을 해야 한다. 한쪽을 늘리면 다른 쪽도 맞춘다.
     // ─────────────────────────────────────────────
-    // 목소리: 망설임 없이 판결을 내리는 판사. 짧고 단호하게. "떠먹여 준다"류 표현은 쓰지 않는다.
-    // 선택지가 음식이 아닐 수도 있으니 "드세요" 같은 먹는 동사는 피한다.
-    var RESULT_LINES = [
-      "{c}. 고민 끝.",
-      "{c:으로} 판결합니다.",
-      "{c}. 뒤돌아보지 마세요.",
-      "{c:으로} 갑니다. 이견은 받지 않습니다.",
-      "오늘은 {c}. 이미 정해졌습니다.",
-      "{c}. 더 생각하면 손해예요.",
-      "{c:이} 답입니다. 이유는 묻지 마세요.",
-      "{c}. 의사봉은 이미 내려쳤습니다.",
-      "{c:으로} 하시죠. 끝.",
-      "{c}. 이게 맞습니다.",
-      "{c:으로} 결정. 다음 고민으로 넘어가세요.",
-      "고민은 여기까지. {c}.",
-      "{c}. 두 번 말하지 않습니다.",
-      "{c:은} 오늘의 정답입니다.",
-      "{c}. 속으로 이미 바라고 있었잖아요.",
-      "본 법정은 {c:을} 택합니다.",
-      "{c}. 이걸로 갑니다.",
-      "{c}. 이 이상 고민은 사치입니다.",
-      "판결을 선고합니다. {c}.",
-      "{c}. 깔끔하게 정리됐습니다.",
-      "{c}. 지금 바로 움직이세요.",
-      "고르라면 {c}. 망설임 없이.",
-      "{c}. 오늘은 이쪽입니다.",
-      "{c}. 토 달지 않기로 해요.",
-      "{c}. 이의는 기각합니다.",
-      "주문은 하나. {c}.",
-      "{c}. 망설임은 제가 가져갑니다.",
-      "정답은 {c}. 박수는 생략합니다.",
-      "{c}. 그걸로 충분합니다.",
-      "{c}. 이 판결은 흔들리지 않습니다."
-    ];
+    var DEFAULT_LANG = "ko";
 
-    var LIKE_LINES = [
-      "좋습니다. 그대로 가세요.",
-      "탁월한 선택입니다. 고른 건 저지만요.",
-      "역시. 이제 움직이세요.",
-      "좋습니다. 다음 사건도 맡겨 주세요.",
-      "승복하셨군요. 이것으로 폐정합니다.",
-      "그렇죠. 고민한 시간이 아까울 뿐입니다."
-    ];
+    var COPY = {
+      ko: {
+        resultLines: [
+          "{c}. 고민 끝.",
+          "{c:으로} 판결합니다.",
+          "{c}. 뒤돌아보지 마세요.",
+          "{c:으로} 갑니다. 이견은 받지 않습니다.",
+          "오늘은 {c}. 이미 정해졌습니다.",
+          "{c}. 더 생각하면 손해예요.",
+          "{c:이} 답입니다. 이유는 묻지 마세요.",
+          "{c}. 의사봉은 이미 내려쳤습니다.",
+          "{c:으로} 하시죠. 끝.",
+          "{c}. 이게 맞습니다.",
+          "{c:으로} 결정. 다음 고민으로 넘어가세요.",
+          "고민은 여기까지. {c}.",
+          "{c}. 두 번 말하지 않습니다.",
+          "{c:은} 오늘의 정답입니다.",
+          "{c}. 속으로 이미 바라고 있었잖아요.",
+          "본 법정은 {c:을} 택합니다.",
+          "{c}. 이걸로 갑니다.",
+          "{c}. 이 이상 고민은 사치입니다.",
+          "판결을 선고합니다. {c}.",
+          "{c}. 깔끔하게 정리됐습니다.",
+          "{c}. 지금 바로 움직이세요.",
+          "고르라면 {c}. 망설임 없이.",
+          "{c}. 오늘은 이쪽입니다.",
+          "{c}. 토 달지 않기로 해요.",
+          "{c}. 이의는 기각합니다.",
+          "주문은 하나. {c}.",
+          "{c}. 망설임은 제가 가져갑니다.",
+          "정답은 {c}. 박수는 생략합니다.",
+          "{c}. 그걸로 충분합니다.",
+          "{c}. 이 판결은 흔들리지 않습니다."
+        ],
+        likeLines: [
+          "좋습니다. 그대로 가세요.",
+          "탁월한 선택입니다. 고른 건 저지만요.",
+          "역시. 이제 움직이세요.",
+          "좋습니다. 다음 사건도 맡겨 주세요.",
+          "승복하셨군요. 이것으로 폐정합니다.",
+          "그렇죠. 고민한 시간이 아까울 뿐입니다."
+        ],
+        otherLine: "그럼 이미 답은 정해져 있었네요. {o:으로} 가세요.",
+        notices: {
+          empty: "두 칸에 선택지를 하나씩 적어 주세요.",
+          single: "나머지 한 칸도 채워 주세요.",
+          same: "두 선택지가 같네요. 판결할 사건이 아닙니다.",
+          tooMany: "한 칸에 하나씩, 두 가지만 적어 주세요."
+        },
+        safety: {
+          health: "이 결정은 전문가와 상의하세요.",
+          selfHarm: "이건 제가 대신 고를 일이 아니에요. 혼자 견디지 말고 자살예방 상담전화 109에 전화해 이야기해 주세요. 24시간 열려 있습니다."
+        }
+      },
 
-    var OTHER_LINE = "그럼 이미 답은 정해져 있었네요. {o:으로} 가세요.";
-
-    var NOTICES = {
-      empty: "두 칸에 선택지를 하나씩 적어 주세요.",
-      single: "나머지 한 칸도 채워 주세요.",
-      same: "두 선택지가 같네요. 판결할 사건이 아닙니다.",
-      tooMany: "한 칸에 하나씩, 두 가지만 적어 주세요."
+      en: {
+        resultLines: [
+          "{c}. Case closed.",
+          "The court rules: {c}.",
+          "{c}. Don't look back.",
+          "{c}. Objection overruled.",
+          "{c}. The gavel has already fallen.",
+          "Verdict: {c}. No appeals.",
+          "{c}. Thinking longer only costs you.",
+          "{c} it is. Next case.",
+          "{c}. The court has spoken.",
+          "{c}. Final answer.",
+          "Ruling for {c}. Move on.",
+          "{c}. Stop deliberating.",
+          "{c}. Don't ask why.",
+          "{c}. I won't say it twice.",
+          "{c}. You were leaning this way anyway.",
+          "This court finds for {c}.",
+          "{c}. We're going with this.",
+          "{c}. More hesitation is a luxury.",
+          "Judgment is entered: {c}.",
+          "{c}. Clean and simple.",
+          "{c}. Go now.",
+          "If I must choose: {c}. No hesitation.",
+          "{c}. Today, it's this one.",
+          "{c}. No further questions.",
+          "{c}. Motion granted.",
+          "One ruling only: {c}.",
+          "{c}. I'll carry the doubt for you.",
+          "The answer is {c}. Hold the applause.",
+          "{c}. That's enough.",
+          "{c}. This ruling stands."
+        ],
+        likeLines: [
+          "Good. Carry on.",
+          "Excellent choice. Mine, technically.",
+          "Knew it. Now go.",
+          "Good. Bring me your next case.",
+          "Satisfied? Court is adjourned.",
+          "Right. The only regret is the time spent deciding."
+        ],
+        otherLine: "Then your answer was already decided. Go with {o}.",
+        notices: {
+          empty: "Enter one option in each field.",
+          single: "Fill in the other field too.",
+          same: "Both options are the same. No case to rule on.",
+          tooMany: "One option per field, two options in total."
+        },
+        safety: {
+          health: "Please talk to a professional about this decision.",
+          // 109는 한국, 988은 미국, 116 123은 영국·아일랜드 (2026-10 공식 출처로 확인).
+          selfHarm: "This isn't something I should decide for you. Please don't carry it alone. In Korea, call the suicide prevention line 109 (24/7). In the US, call or text 988. In the UK and Ireland, call Samaritans on 116 123. Elsewhere, please contact your local crisis line."
+        }
+      }
     };
 
-    var SAFETY_MESSAGES = {
-      health: "이 결정은 전문가와 상의하세요.",
-      selfHarm: "이건 제가 대신 고를 일이 아니에요. 혼자 견디지 말고 자살예방 상담전화 109에 전화해 이야기해 주세요. 24시간 열려 있습니다."
-    };
+    function copyFor(lang) {
+      return COPY[lang] || COPY[DEFAULT_LANG];
+    }
 
     // ─────────────────────────────────────────────
     // 난수
@@ -1031,10 +1182,44 @@
       return String(text || "").normalize("NFC").replace(/\s+/g, "").toLowerCase();
     }
 
+    // 소문자, 공백 하나로 정리, 둥근 따옴표(’)는 곧은 따옴표(')로. iOS 키보드는 둥근 따옴표를 넣는다.
+    function spaced(text) {
+      return String(text || "")
+        .normalize("NFC")
+        .toLowerCase()
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/\s+/g, " ");
+    }
+
+    function isAscii(text) {
+      return /^[\x00-\x7f]*$/.test(text);
+    }
+
+    // keyword가 영문·숫자 바로 뒤가 아닌 곳(단어 시작)에서 나오는지 본다.
+    function containsAtWordStart(text, keyword) {
+      var from = 0;
+      var at = text.indexOf(keyword, from);
+
+      while (at !== -1) {
+        var before = at === 0 ? "" : text.charAt(at - 1);
+        if (!/[a-z0-9]/.test(before)) {
+          return true;
+        }
+        from = at + 1;
+        at = text.indexOf(keyword, from);
+      }
+      return false;
+    }
+
     function containsAny(text, keywords) {
-      var target = compact(text);
+      var compactText = compact(text);
+      var spacedText = spaced(text);
+
       return keywords.some(function (keyword) {
-        return target.indexOf(compact(keyword)) !== -1;
+        if (isAscii(keyword)) {
+          return containsAtWordStart(spacedText, spaced(keyword));
+        }
+        return compactText.indexOf(compact(keyword)) !== -1;
       });
     }
 
@@ -1055,16 +1240,18 @@
     // 필터 → 파싱 → 추첨 순서. 필터에 걸리면 randomInt를 부르지 않는다.
     // ─────────────────────────────────────────────
 
-    function decideParsed(safetyText, parsed, randomInt) {
+    // lang은 안내 문구의 언어만 정한다. 추첨에는 아무 영향이 없다.
+    function decideParsed(safetyText, parsed, randomInt, lang) {
       var draw = randomInt || cryptoRandomInt;
+      var copy = copyFor(lang);
 
       var safety = checkSafety(safetyText);
       if (safety) {
-        return { status: "safety", kind: safety, message: SAFETY_MESSAGES[safety] };
+        return { status: "safety", kind: safety, message: copy.safety[safety] };
       }
 
       if (!parsed.ok) {
-        return { status: "invalid", reason: parsed.reason, message: NOTICES[parsed.reason] };
+        return { status: "invalid", reason: parsed.reason, message: copy.notices[parsed.reason] };
       }
 
       var index = draw(2);
@@ -1079,15 +1266,15 @@
     }
 
     // 한 줄 입력: "짜장 vs 짬뽕"
-    function decide(input, randomInt) {
-      return decideParsed(input, parseChoices(input), randomInt);
+    function decide(input, randomInt, lang) {
+      return decideParsed(input, parseChoices(input), randomInt, lang);
     }
 
     // 두 칸 입력: 화면이 쓰는 방식
-    function decidePair(first, second, randomInt) {
+    function decidePair(first, second, randomInt, lang) {
       // 공백으로 이으면 필터가 공백을 지운 뒤 칸 경계를 넘어 오탐한다 ("예약" + "먹방" → "약먹").
       var safetyText = String(first || "") + " / " + String(second || "");
-      return decideParsed(safetyText, parsePair(first, second), randomInt);
+      return decideParsed(safetyText, parsePair(first, second), randomInt, lang);
     }
 
     // ─────────────────────────────────────────────
@@ -1165,11 +1352,9 @@
     return {
       SELF_HARM_KEYWORDS: SELF_HARM_KEYWORDS,
       HEALTH_KEYWORDS: HEALTH_KEYWORDS,
-      RESULT_LINES: RESULT_LINES,
-      LIKE_LINES: LIKE_LINES,
-      OTHER_LINE: OTHER_LINE,
-      NOTICES: NOTICES,
-      SAFETY_MESSAGES: SAFETY_MESSAGES,
+      DEFAULT_LANG: DEFAULT_LANG,
+      COPY: COPY,
+      copyFor: copyFor,
       cryptoRandomInt: cryptoRandomInt,
       parseChoices: parseChoices,
       parsePair: parsePair,
@@ -1191,7 +1376,60 @@
     var ROLL_DURATION_MS = 700;
     var ROLL_STEP_MS = 90;
     var REDUCED_ROLL_DURATION_MS = 500;
-    var CRYPTO_ERROR_MESSAGE = "이 브라우저에서는 공정한 추첨을 할 수 없어요. 최신 브라우저로 열어 주세요.";
+
+    // 화면 글자 (언어별). 결과·안내 문구는 PickCore.COPY에 있다.
+    var STRINGS = {
+      ko: {
+        title: "Pick-assist — 망설이지 마세요",
+        sloganMain: "망설이지 마세요",
+        sloganDash: " - ",
+        sloganSub: "판결은 Pick-assist 에게, 선택은 자유",
+        lede: "두 선택지를 올리면, 공정하게 판결합니다.",
+        labelA: "첫 번째 선택지",
+        labelB: "두 번째 선택지",
+        pick: "골라줘",
+        call109: "109에 전화하기",
+        call988: "Call or text 988 (US)",
+        call116: "Call 116 123 (UK & IE)",
+        verdict: "판결",
+        deliberating: "심리 중…",
+        like: "좋아",
+        other: "아… 다른 거",
+        again: "다시 판결",
+        reset: "새로 입력",
+        footer1: "이 법정은 철저한 비공개 재판입니다.",
+        footer2: "사건도 판결도 이 기기 밖으로 새지 않아요.",
+        cryptoError: "이 브라우저에서는 공정한 추첨을 할 수 없어요. 최신 브라우저로 열어 주세요.",
+        switchTo: "English",
+        switchToLang: "en",
+        switchLabel: "Switch to English"
+      },
+      en: {
+        title: "Pick-assist — Don't hesitate",
+        sloganMain: "Don't hesitate",
+        sloganDash: " — ",
+        sloganSub: "Leave the verdict to Pick-assist; the choice is still yours.",
+        lede: "Submit two options, and the court rules fairly.",
+        labelA: "First option",
+        labelB: "Second option",
+        pick: "Pick for me",
+        call109: "Call 109 (Korea)",
+        call988: "Call or text 988 (US)",
+        call116: "Call 116 123 (UK & IE)",
+        verdict: "Verdict",
+        deliberating: "Deliberating…",
+        like: "Good",
+        other: "Hmm… the other one",
+        again: "Rule again",
+        reset: "New case",
+        footer1: "This court holds closed hearings.",
+        footer2: "Neither the case nor the verdict leaves this device.",
+        cryptoError: "This browser can't make a fair draw. Please open the page in an up-to-date browser.",
+        switchTo: "한국어",
+        switchToLang: "ko",
+        switchLabel: "한국어로 보기"
+      }
+    };
 
     var form = document.getElementById("pick-form");
     var inputA = document.getElementById("choice-a");
@@ -1200,7 +1438,6 @@
     var notice = document.getElementById("notice");
     var safety = document.getElementById("safety");
     var safetyMessage = document.getElementById("safety-message");
-    var safetyCall = document.getElementById("safety-call");
     var result = document.getElementById("result");
     var pickedText = document.getElementById("picked");
     var verdictDate = document.getElementById("verdict-date");
@@ -1210,6 +1447,8 @@
     var reactOther = document.getElementById("react-other");
     var reply = document.getElementById("reply");
     var again = document.getElementById("again");
+    var langToggle = document.getElementById("lang-toggle");
+    var safetyCalls = document.getElementById("safety-calls");
     var againSame = document.getElementById("again-same");
     var againNew = document.getElementById("again-new");
 
@@ -1217,6 +1456,7 @@
     var coarsePointer = window.matchMedia("(pointer: coarse)");
 
     var state = {
+      lang: PickCore.DEFAULT_LANG,
       rolling: false,
       lastPair: ["", ""],
       lastDecision: null,
@@ -1227,7 +1467,7 @@
     function clearOutputs() {
       notice.hidden = true;
       safety.hidden = true;
-      safetyCall.hidden = true;
+      safetyCalls.hidden = true;
       safety.classList.remove("is-care");
       result.hidden = true;
       reply.hidden = true;
@@ -1242,7 +1482,7 @@
       safetyMessage.textContent = decision.message;
 
       var isSelfHarm = decision.kind === "selfHarm";
-      safetyCall.hidden = !isSelfHarm;
+      safetyCalls.hidden = !isSelfHarm;
       safety.classList.toggle("is-care", isSelfHarm);
       safety.hidden = false;
     }
@@ -1252,6 +1492,7 @@
       pickButton.disabled = busy;
       againSame.disabled = busy;
       againNew.disabled = busy;
+      langToggle.disabled = busy;
     }
 
     function run(first, second) {
@@ -1263,9 +1504,9 @@
 
       var decision;
       try {
-        decision = PickCore.decidePair(first, second);
+        decision = PickCore.decidePair(first, second, null, state.lang);
       } catch (error) {
-        showNotice(CRYPTO_ERROR_MESSAGE);
+        showNotice(t("cryptoError"));
         return;
       }
 
@@ -1304,7 +1545,7 @@
       result.classList.add("is-rolling");
       reactions.hidden = true;
       again.hidden = true;
-      lineText.textContent = "심리 중…";
+      lineText.textContent = t("deliberating");
       verdictDate.textContent = "";
       pickedText.textContent = decision.choices[0];
       result.hidden = false;
@@ -1330,25 +1571,36 @@
       }, ROLL_DURATION_MS);
     }
 
-    // 판결문 아래 "2026. 9. 29. 선고" (기기 시계 기준)
+    // 판결문 아래 날짜 (기기 시계 기준). 한국어 "2026. 9. 29. 선고", 영어 "Ruled Oct 3, 2026"
+    var MONTHS_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
     function formatVerdictDate(date) {
+      if (state.lang === "en") {
+        return "Ruled " + MONTHS_EN[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+      }
       return date.getFullYear() + ". " + (date.getMonth() + 1) + ". " + date.getDate() + ". 선고";
     }
 
+    // 결과 문구와 날짜를 현재 언어로 쓴다. 언어를 바꿀 때도 다시 부른다.
+    function renderVerdictText(decision) {
+      var lines = PickCore.copyFor(state.lang).resultLines;
+      lineText.textContent = PickCore.fillTemplate(lines[state.lastLineIndex], decision);
+      verdictDate.textContent = formatVerdictDate(new Date());
+    }
+
     function reveal(decision) {
-      var lines = PickCore.RESULT_LINES;
+      var count = PickCore.copyFor(state.lang).resultLines.length;
       var lineIndex;
 
       try {
-        lineIndex = PickCore.pickLineIndex(lines.length, null, state.lastLineIndex);
+        lineIndex = PickCore.pickLineIndex(count, null, state.lastLineIndex);
       } catch (error) {
         lineIndex = 0;
       }
       state.lastLineIndex = lineIndex;
 
       pickedText.textContent = decision.picked;
-      lineText.textContent = PickCore.fillTemplate(lines[lineIndex], decision);
-      verdictDate.textContent = formatVerdictDate(new Date());
+      renderVerdictText(decision);
 
       result.classList.remove("is-rolling");
       // 애니메이션을 다시 걸기 위해 레이아웃을 한 번 읽는다.
@@ -1394,7 +1646,7 @@
     });
 
     reactLike.addEventListener("click", function () {
-      var lines = PickCore.LIKE_LINES;
+      var lines = PickCore.copyFor(state.lang).likeLines;
       var index;
 
       try {
@@ -1412,7 +1664,7 @@
       if (!state.lastDecision) {
         return;
       }
-      showReply(PickCore.fillTemplate(PickCore.OTHER_LINE, state.lastDecision));
+      showReply(PickCore.fillTemplate(PickCore.copyFor(state.lang).otherLine, state.lastDecision));
     });
 
     againSame.addEventListener("click", function () {
@@ -1426,6 +1678,77 @@
       state.lastDecision = null;
       inputA.focus();
     });
+
+    // ── 언어 ──
+
+    function t(key) {
+      return STRINGS[state.lang][key];
+    }
+
+    // 주소의 ?lang= 이 먼저, 없으면 브라우저 첫 번째 언어가 한국어인지로 정한다.
+    function detectLang() {
+      var param = "";
+      try {
+        param = new URLSearchParams(window.location.search).get("lang") || "";
+      } catch (error) {
+        param = "";
+      }
+      if (STRINGS[param]) {
+        return param;
+      }
+
+      var preferred = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+      return preferred.toLowerCase().indexOf("ko") === 0 ? "ko" : "en";
+    }
+
+    function applyLang(lang) {
+      state.lang = STRINGS[lang] ? lang : PickCore.DEFAULT_LANG;
+
+      document.documentElement.lang = state.lang;
+      document.title = t("title");
+
+      Array.prototype.forEach.call(document.querySelectorAll("[data-i18n]"), function (element) {
+        element.textContent = t(element.getAttribute("data-i18n"));
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-lang-only]"), function (element) {
+        element.hidden = element.getAttribute("data-lang-only") !== state.lang;
+      });
+
+      langToggle.textContent = t("switchTo");
+      langToggle.lang = t("switchToLang");
+      langToggle.setAttribute("aria-label", t("switchLabel"));
+
+      // 화면에 남은 안내는 언어가 섞이지 않게 닫는다. 판결은 새 언어로 다시 쓴다.
+      notice.hidden = true;
+      safety.hidden = true;
+      reply.hidden = true;
+      if (state.lastDecision && !result.hidden) {
+        renderVerdictText(state.lastDecision);
+        reactions.hidden = false;
+      }
+    }
+
+    // 링크를 공유하면 같은 언어로 열리도록 주소만 바꾼다. 저장은 하지 않는다.
+    function rememberLangInUrl(lang) {
+      try {
+        var url = new URL(window.location.href);
+        url.searchParams.set("lang", lang);
+        window.history.replaceState(null, "", url.toString());
+      } catch (error) {
+        // file:// 등에서 막히면 주소는 그대로 둔다. 화면 전환에는 영향이 없다.
+      }
+    }
+
+    langToggle.addEventListener("click", function () {
+      if (state.rolling) {
+        return;
+      }
+      var next = t("switchToLang");
+      applyLang(next);
+      rememberLangInUrl(next);
+    });
+
+    applyLang(detectLang());
   })();
   </script>
 </body>

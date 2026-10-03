@@ -2,38 +2,42 @@
 
 세션 사이 인수인계 기록. 새 세션은 대화 기록을 모르므로 이어서 할 정보는 여기에 남긴다.
 
-## 현재 상태 (마지막 갱신: 2026-09-29, 5차)
+## 현재 상태 (마지막 갱신: 2026-10-03)
 
-- Pull Request(PR) https://github.com/rundope/Pick-assist/pull/1 은 merge되었다 (`main` = `851d3d6`). merge된 Pull Request(PR)는 다시 쓰지 않는다. 새 작업은 최신 `main`에서 branch를 새로 시작해 새 Pull Request(PR)로 올린다.
-- GitHub Pages가 `main` / root에서 켜져 있고, 첫 배포("pages build and deployment")가 성공했다. 주소: https://rundope.github.io/Pick-assist/
-- 클라우드 세션의 네트워크 정책이 `rundope.github.io`를 막아서, 세션 안에서는 배포된 사이트를 직접 열 수 없다. 배포 확인은 GitHub Actions의 Pages 배포 기록으로 한다. 직접 열어 보려면 환경 설정의 Network access에 이 도메인을 추가해야 한다.
-- 테스트는 42개이고 모두 통과한다 (`node --test tests/*.test.js`). `tests/meta.test.js`가 공유 미리보기 태그를 확인한다.
-- 회사 이름은 Spoonbills다. 브랜드 톤 문장 "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유"가 첫 화면 제목(슬로건)이다. footer는 "이 법정은 철저한 비공개 재판입니다. 사건도 판결도 이 기기 밖으로 새지 않아요."와 "Spoonbills" 두 줄이다. 제목 아래 "두 선택지를 올리면, 공정하게 판결합니다."는 사용자가 유지하기로 했다.
+- 앱은 GitHub Pages에 배포되어 있다: https://rundope.github.io/Pick-assist/
+- Pull Request(PR) 1번(MVP)과 2번(공유 미리보기)은 merge되었다 (`main` = `678a1d4`). 두 번 모두 Pages 배포가 성공했다.
+- merge된 Pull Request(PR)는 다시 쓰지 않는다. 새 작업은 최신 `main`에서 branch를 새로 시작해 새 Pull Request(PR)로 올린다.
+- 작업 branch `claude/clever-maxwell-tgq5la`의 Pull Request(PR) 3번(https://github.com/rundope/Pick-assist/pull/3)에 퇴근 정리와 영어 버전이 함께 올라가 있다. merge 전이다.
+- 테스트는 54개이고 모두 통과한다 (`node --test tests/*.test.js`).
+- 화면은 한국어·영어 두 언어다. `?lang=ko|en` → 브라우저 첫 번째 언어 순으로 정하고, 오른쪽 위 버튼으로 바꾼다. 영어 슬로건은 "Don't hesitate" / "Leave the verdict to Pick-assist; the choice is still yours.", 버튼은 "Pick for me"다. 규칙은 CLAUDE.md의 "두 언어" 절에 있다.
+- 회사 이름은 Spoonbills다. 첫 화면 제목(슬로건)은 "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유", 그 아래 "두 선택지를 올리면, 공정하게 판결합니다."(사용자가 유지하기로 함)다.
+- footer는 "이 법정은 철저한 비공개 재판입니다. / 사건도 판결도 이 기기 밖으로 새지 않아요."와 "Spoonbills"다.
 - 입력 예시(placeholder)와 README 예시는 `Mercedes-Benz` vs `BMW`다.
+- 공유 미리보기(Open Graph) 이미지는 `docs/og-image.png`(1200×630)이고 배포되었다. 사용자는 아직 이미지 주소와 카카오톡 카드를 새 배포 기준으로 확인하지 않았다.
 
-### 4차에 한 일
+### 2026-10-03에 한 일
 
-- 첫 화면 제목을 옛 슬로건("망설임은 기각합니다. 지금 결정하세요.")에서 브랜드 톤 문장으로 바꿨다. 휴대폰에서 줄바꿈이 흔들리지 않게 "망설이지 마세요" / "판결은 Pick-assist 에게, 선택은 자유" 두 줄로 나누고, 이음표 " - "는 화면에서만 숨겨 스크린 리더에는 원문 그대로 읽힌다.
-- 입력 예시를 짜장/짬뽕에서 Mercedes-Benz/BMW로 바꾸고 README 스크린샷을 다시 찍었다.
-- footer에서 슬로건 줄을 뺐다 (제목과 중복). 개인정보 문구는 딱딱하다는 사용자 의견에 따라 법정 유머로 바꿨다: "이 법정은 철저한 비공개 재판입니다. 사건도 판결도 이 기기 밖으로 새지 않아요." 문구는 사실(서버·저장·전송 없음, CSP 차단)과 맞아야 한다.
+- 영어 버전을 넣었다. 결과 문구 30개·반응 6개·안내·안전 문구를 영어로 쓰고, 문구를 `PickCore.COPY.ko/en`, 화면 글자를 `STRINGS.ko/en`으로 나눴다.
+- 영어 건강·안전 키워드를 추가했다. 영어 키워드는 단어 시작 위치에서만 맞춘다 ("spend my life" ≠ "end my life", "medicine ball", "hospitality"는 걸리지 않음).
+- 영어 자해 안내는 109(한국)와 함께 988(미국), 116 123(영국·아일랜드 Samaritans)을 알려 주고 전화 버튼 세 개를 보여준다. 세 번호는 2026-10-03에 공식 출처로 확인했다.
+- README를 두 언어 사용설명서로 다시 쓰고, 스크린샷을 `docs/screenshot-{ko,en}-{light,dark}.png`로 새로 찍었다.
 
-### 3차에 한 일
+### 2026-09-29에 한 일
 
-- footer 첫 줄을 브랜드 톤 문장으로 바꿨다.
-- README의 스크린샷 자리를 실제 화면(라이트·다크, 390px)으로 채웠다 (`docs/`).
-- 건강·안전 키워드를 보강했다 (라식·라섹, 타이레놀, 졸음운전, 헬멧, 손목 긋기, 생을 마감, 과다복용 등). 오탐 반례(마약떡볶이, 대마도, 숙제 끝내버릴까 등)도 테스트에 넣었다.
+- 저장소를 처음부터 만들고 MVP를 배포했다: 두 칸 입력, `crypto.getRandomValues()` 50:50 추첨, 건강·안전 필터(109 안내 포함), 판사 목소리 결과 문구 30개, 재판정 디자인, Spoonbills 로고.
+- 회사 이름을 The Spoon Lab에서 Spoonbills로, 슬로건과 브랜드 톤을 "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유"로 확정했다.
+- 건강·안전 키워드를 실제 입력 예시로 보강하고 오탐 반례를 테스트에 넣었다.
+- README 스크린샷과 공유 미리보기(Open Graph) 카드를 넣었다.
 
 ### 다음에 할 일 (우선순위 순)
 
-1. 실제 iPhone Safari와 iPad에서 확인한다. iOS에는 한글 명조 폰트가 기본으로 없어서 제목이 고딕으로 보일 수 있다. 명조가 꼭 필요하면 폰트 파일을 저장소에 직접 넣는 방법을 검토한다 (외부 폰트 CDN은 원칙상 쓰지 않는다).
-2. 공유 미리보기 Pull Request(PR)가 merge되면 카카오톡에 링크를 붙여 카드가 뜨는지 확인한다. 카카오톡은 미리보기를 캐시하므로, 예전 모습이 보이면 카카오 개발자 사이트의 "공유 디버거"에서 캐시를 초기화한다.
-
-### 5차에 한 일
-
-- HANDOFF.md를 merge·배포 상태에 맞게 고쳤다.
-- 공유 미리보기(Open Graph)를 넣었다. 카드 이미지는 `docs/og-image.png`(1200×630)이고, 로고·"망설이지 마세요"·"판결은 Pick-assist 에게, 선택은 자유"가 들어간다. 이미지는 Noto Serif KR·Noto Sans KR로 렌더링했지만 폰트 파일은 저장소에 넣지 않았다 (사이트는 여전히 외부 폰트 없음). 문구를 바꾸면 이미지도 다시 만들어야 한다.
+1. Pull Request(PR) 3번이 merge되면 https://rundope.github.io/Pick-assist/?lang=en 에서 영어 화면을 확인한다.
+2. 공유 미리보기를 확인한다. https://rundope.github.io/Pick-assist/docs/og-image.png 가 열리는지 보고, 카카오 개발자 사이트의 도구 → 공유 디버거에서 `https://rundope.github.io/Pick-assist/` 캐시를 초기화한 뒤 카카오톡 카드를 확인한다 (merge 전에 붙인 링크가 이미지 없는 카드로 캐시되어 있을 수 있다).
+3. 실제 iPhone Safari와 iPad에서 두 언어를 모두 확인한다. iOS에는 한글 명조 폰트가 기본으로 없어서 제목이 고딕으로 보일 수 있다. 명조가 꼭 필요하면 폰트 파일을 저장소에 직접 넣는 방법을 검토한다 (외부 폰트 CDN은 원칙상 쓰지 않는다).
 
 ### 주의할 점
+
+- 공유 미리보기 카드(Open Graph)와 정적 `<title>`은 한국어뿐이다. 메신저는 JavaScript를 실행하지 않으므로 `?lang=en` 링크도 한국어 카드로 보인다. 영어 카드가 필요하면 별도 영어 페이지나 영어 카드 이미지를 검토해야 한다.
 
 - `.claude/skills/`의 스킬은 세션이 시작되거나 저장소가 등록될 때 읽힌다. 1차에는 세션 도중에 만들어서 `wrap-up`을 호출하지 못했지만, 3차 시점에는 `wrap-up`·`start-work`가 스킬 목록에 등록된 것을 확인했다.
 - 테스트는 `node --test tests/`가 아니라 `node --test tests/*.test.js`로 돌린다. Node.js 22는 디렉터리 인자를 파일 경로로 해석한다.
@@ -42,6 +46,27 @@
 - 정규식 lookbehind는 구형 Safari에서 스크립트 전체를 멈추게 하므로 쓰지 않는다 (테스트로 막아 두었다).
 - 로고는 사용자가 준 PNG를 potrace로 벡터화한 path다. 새 로고를 받으면 같은 방식으로 SVG path를 만들어 헤더(`.brand .logo`)와 favicon data URI를 함께 바꾼다.
 - README 스크린샷(`docs/screenshot-*.png`)은 화면을 바꾸면 다시 찍는다 (Playwright, 390px, deviceScaleFactor 2, fullPage).
+- 클라우드 세션의 네트워크 정책이 `rundope.github.io`를 막는다. 세션 안에서는 배포된 사이트를 직접 열 수 없으므로, 배포 확인은 GitHub Actions의 "pages build and deployment" 기록으로 한다. 직접 열려면 환경 설정의 Network access에 이 도메인을 추가해야 한다.
+- 공유 미리보기 이미지는 문구를 그림으로 만든 것이다. 슬로건을 바꾸면 `docs/og-image.png`도 다시 만든다 (Noto Serif KR·Noto Sans KR로 렌더링, 폰트 파일은 저장소에 넣지 않음).
+- auto mode의 권한 검사 서버가 일시적으로 응답하지 않으면 Bash(git·테스트)가 막힌다. 그동안에는 편집 도구로 파일만 고치고, 복구되면 테스트 → commit → push 순서로 처리한다.
+
+
+## 5차 기록 (2026-09-29): 공유 미리보기
+
+- HANDOFF.md를 merge·배포 상태에 맞게 고쳤다.
+- 공유 미리보기(Open Graph)를 넣었다. 카드 이미지는 `docs/og-image.png`(1200×630)이고, 로고·"망설이지 마세요"·"판결은 Pick-assist 에게, 선택은 자유"가 들어간다. 이미지는 Noto Serif KR·Noto Sans KR로 렌더링했지만 폰트 파일은 저장소에 넣지 않았다 (사이트는 여전히 외부 폰트 없음). 문구를 바꾸면 이미지도 다시 만들어야 한다.
+
+## 4차 기록 (2026-09-29): 슬로건·예시·footer
+
+- 첫 화면 제목을 옛 슬로건("망설임은 기각합니다. 지금 결정하세요.")에서 브랜드 톤 문장으로 바꿨다. 휴대폰에서 줄바꿈이 흔들리지 않게 "망설이지 마세요" / "판결은 Pick-assist 에게, 선택은 자유" 두 줄로 나누고, 이음표 " - "는 화면에서만 숨겨 스크린 리더에는 원문 그대로 읽힌다.
+- 입력 예시를 짜장/짬뽕에서 Mercedes-Benz/BMW로 바꾸고 README 스크린샷을 다시 찍었다.
+- footer에서 슬로건 줄을 뺐다 (제목과 중복). 개인정보 문구는 딱딱하다는 사용자 의견에 따라 법정 유머로 바꿨다: "이 법정은 철저한 비공개 재판입니다. 사건도 판결도 이 기기 밖으로 새지 않아요." 문구는 사실(서버·저장·전송 없음, CSP 차단)과 맞아야 한다.
+
+## 3차 기록 (2026-09-29): 스크린샷·키워드
+
+- footer 첫 줄을 브랜드 톤 문장으로 바꿨다.
+- README의 스크린샷 자리를 실제 화면(라이트·다크, 390px)으로 채웠다 (`docs/`).
+- 건강·안전 키워드를 보강했다 (라식·라섹, 타이레놀, 졸음운전, 헬멧, 손목 긋기, 생을 마감, 과다복용 등). 오탐 반례(마약떡볶이, 대마도, 숙제 끝내버릴까 등)도 테스트에 넣었다.
 
 ## 2차 기록 (2026-09-29): 재판정 디자인
 
