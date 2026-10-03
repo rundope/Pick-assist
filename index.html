@@ -724,14 +724,18 @@
 
     // ─────────────────────────────────────────────
     // 건강·안전 키워드
-    // 비교할 때 입력과 키워드 모두 공백을 지우고 소문자로 바꾼다.
-    // 그래서 "죽고 싶"은 "죽고싶"도 잡는다.
+    // 한국어 키워드: 입력과 키워드 모두 공백을 지우고 비교한다.
+    //   그래서 "죽고 싶"은 "죽고싶"도 잡는다.
+    // 영어(ASCII) 키워드: 소문자로 바꾸고, 단어가 시작하는 위치에서만 맞춘다.
+    //   공백을 지우면 "spend my life"가 "end my life"에 걸리기 때문이다.
+    //   단어 끝은 열어 두어서 "pregnan"은 pregnant·pregnancy를 모두 잡는다.
     // 짧은 단어는 오탐이 많으니 넣기 전에 일상 표현과 겹치는지 확인할 것.
     //   예: "주사"는 "주사위"와 겹쳐서 "주사 맞", "주사를"로 쓴다.
     //   예: "약" 단독은 "약속", "예약"과 겹쳐서 쓰지 않는다.
     //   예: "마약"은 "마약떡볶이"와, "대마"는 "대마도"와 겹쳐서 행동·명사 형태로 쓴다.
     //   예: "끝내버릴까"는 "숙제 끝내버릴까"와 구분이 안 돼서 넣지 않는다.
-    // 알려진 오탐: "수술실 드라마"처럼 의료 단어가 들어간 일상 선택. 안전 쪽으로 둔다.
+    //   예: "medicine"은 "medicine ball"과 겹쳐서 "take medicine" 형태로 쓴다.
+    // 알려진 오탐: "수술실 드라마", "Suicide Squad"처럼 해당 단어가 들어간 일상 선택. 안전 쪽으로 둔다.
     // ─────────────────────────────────────────────
 
     // 자해·자살 표현 → 추첨하지 않고 자살예방 상담전화 109 안내
@@ -765,9 +769,19 @@
       "사라지고 싶",
       "살기 싫",
       "suicide",
+      "suicidal",
       "kill myself",
+      "killing myself",
       "self harm",
-      "self-harm"
+      "self-harm",
+      "end my life",
+      "take my own life",
+      "cut myself",
+      "hang myself",
+      "overdose",
+      "better off dead",
+      "don't want to live",
+      "dont want to live"
     ];
 
     // 건강·안전 표현 → 추첨하지 않고 "전문가와 상의하세요"
@@ -841,8 +855,39 @@
       "술 먹고 운전",
       "술 마시고 운전",
       "medication",
+      "take medicine",
+      "take my medicine",
+      "prescription",
+      "pills",
+      "dosage",
+      "painkiller",
+      "sleeping pill",
+      "antidepressant",
+      "antibiotic",
+      "insulin",
+      "steroid",
+      "stop treatment",
+      "stop my treatment",
       "surgery",
-      "chemo"
+      "chemo",
+      "to the hospital",
+      "in the hospital",
+      "hospitalized",
+      "emergency room",
+      "see a doctor",
+      "go to the doctor",
+      "dentist",
+      "vaccine",
+      "pregnan",
+      "abortion",
+      "dialysis",
+      "lasik",
+      "botox",
+      "drunk driving",
+      "drive drunk",
+      "drink and drive",
+      "without a helmet",
+      "without a seatbelt"
     ];
 
     // ─────────────────────────────────────────────
@@ -856,68 +901,129 @@
     var SPLIT_MARK = "\u0000";
 
     // ─────────────────────────────────────────────
-    // 문구
+    // 문구 (언어별)
     // {c} = 고른 쪽, {o} = 고르지 않은 쪽.
-    // {c:으로} 처럼 쓰면 받침에 맞춰 조사를 붙인다.
-    // 지원 조사: 으로, 은, 이, 을, 과
+    // 한국어는 {c:으로} 처럼 쓰면 받침에 맞춰 조사를 붙인다 (지원: 으로, 은, 이, 을, 과).
+    // 목소리: 망설임 없이 판결을 내리는 판사. 짧고 단호하게. "떠먹여 준다"(spoon-feed)류 표현은 쓰지 않는다.
+    // 선택지가 음식이 아닐 수도 있으니 "드세요"(eat) 같은 먹는 동사는 피한다.
+    // 두 언어의 문구 풀은 같은 역할을 해야 한다. 한쪽을 늘리면 다른 쪽도 맞춘다.
     // ─────────────────────────────────────────────
-    // 목소리: 망설임 없이 판결을 내리는 판사. 짧고 단호하게. "떠먹여 준다"류 표현은 쓰지 않는다.
-    // 선택지가 음식이 아닐 수도 있으니 "드세요" 같은 먹는 동사는 피한다.
-    var RESULT_LINES = [
-      "{c}. 고민 끝.",
-      "{c:으로} 판결합니다.",
-      "{c}. 뒤돌아보지 마세요.",
-      "{c:으로} 갑니다. 이견은 받지 않습니다.",
-      "오늘은 {c}. 이미 정해졌습니다.",
-      "{c}. 더 생각하면 손해예요.",
-      "{c:이} 답입니다. 이유는 묻지 마세요.",
-      "{c}. 의사봉은 이미 내려쳤습니다.",
-      "{c:으로} 하시죠. 끝.",
-      "{c}. 이게 맞습니다.",
-      "{c:으로} 결정. 다음 고민으로 넘어가세요.",
-      "고민은 여기까지. {c}.",
-      "{c}. 두 번 말하지 않습니다.",
-      "{c:은} 오늘의 정답입니다.",
-      "{c}. 속으로 이미 바라고 있었잖아요.",
-      "본 법정은 {c:을} 택합니다.",
-      "{c}. 이걸로 갑니다.",
-      "{c}. 이 이상 고민은 사치입니다.",
-      "판결을 선고합니다. {c}.",
-      "{c}. 깔끔하게 정리됐습니다.",
-      "{c}. 지금 바로 움직이세요.",
-      "고르라면 {c}. 망설임 없이.",
-      "{c}. 오늘은 이쪽입니다.",
-      "{c}. 토 달지 않기로 해요.",
-      "{c}. 이의는 기각합니다.",
-      "주문은 하나. {c}.",
-      "{c}. 망설임은 제가 가져갑니다.",
-      "정답은 {c}. 박수는 생략합니다.",
-      "{c}. 그걸로 충분합니다.",
-      "{c}. 이 판결은 흔들리지 않습니다."
-    ];
+    var DEFAULT_LANG = "ko";
 
-    var LIKE_LINES = [
-      "좋습니다. 그대로 가세요.",
-      "탁월한 선택입니다. 고른 건 저지만요.",
-      "역시. 이제 움직이세요.",
-      "좋습니다. 다음 사건도 맡겨 주세요.",
-      "승복하셨군요. 이것으로 폐정합니다.",
-      "그렇죠. 고민한 시간이 아까울 뿐입니다."
-    ];
+    var COPY = {
+      ko: {
+        resultLines: [
+          "{c}. 고민 끝.",
+          "{c:으로} 판결합니다.",
+          "{c}. 뒤돌아보지 마세요.",
+          "{c:으로} 갑니다. 이견은 받지 않습니다.",
+          "오늘은 {c}. 이미 정해졌습니다.",
+          "{c}. 더 생각하면 손해예요.",
+          "{c:이} 답입니다. 이유는 묻지 마세요.",
+          "{c}. 의사봉은 이미 내려쳤습니다.",
+          "{c:으로} 하시죠. 끝.",
+          "{c}. 이게 맞습니다.",
+          "{c:으로} 결정. 다음 고민으로 넘어가세요.",
+          "고민은 여기까지. {c}.",
+          "{c}. 두 번 말하지 않습니다.",
+          "{c:은} 오늘의 정답입니다.",
+          "{c}. 속으로 이미 바라고 있었잖아요.",
+          "본 법정은 {c:을} 택합니다.",
+          "{c}. 이걸로 갑니다.",
+          "{c}. 이 이상 고민은 사치입니다.",
+          "판결을 선고합니다. {c}.",
+          "{c}. 깔끔하게 정리됐습니다.",
+          "{c}. 지금 바로 움직이세요.",
+          "고르라면 {c}. 망설임 없이.",
+          "{c}. 오늘은 이쪽입니다.",
+          "{c}. 토 달지 않기로 해요.",
+          "{c}. 이의는 기각합니다.",
+          "주문은 하나. {c}.",
+          "{c}. 망설임은 제가 가져갑니다.",
+          "정답은 {c}. 박수는 생략합니다.",
+          "{c}. 그걸로 충분합니다.",
+          "{c}. 이 판결은 흔들리지 않습니다."
+        ],
+        likeLines: [
+          "좋습니다. 그대로 가세요.",
+          "탁월한 선택입니다. 고른 건 저지만요.",
+          "역시. 이제 움직이세요.",
+          "좋습니다. 다음 사건도 맡겨 주세요.",
+          "승복하셨군요. 이것으로 폐정합니다.",
+          "그렇죠. 고민한 시간이 아까울 뿐입니다."
+        ],
+        otherLine: "그럼 이미 답은 정해져 있었네요. {o:으로} 가세요.",
+        notices: {
+          empty: "두 칸에 선택지를 하나씩 적어 주세요.",
+          single: "나머지 한 칸도 채워 주세요.",
+          same: "두 선택지가 같네요. 판결할 사건이 아닙니다.",
+          tooMany: "한 칸에 하나씩, 두 가지만 적어 주세요."
+        },
+        safety: {
+          health: "이 결정은 전문가와 상의하세요.",
+          selfHarm: "이건 제가 대신 고를 일이 아니에요. 혼자 견디지 말고 자살예방 상담전화 109에 전화해 이야기해 주세요. 24시간 열려 있습니다."
+        }
+      },
 
-    var OTHER_LINE = "그럼 이미 답은 정해져 있었네요. {o:으로} 가세요.";
-
-    var NOTICES = {
-      empty: "두 칸에 선택지를 하나씩 적어 주세요.",
-      single: "나머지 한 칸도 채워 주세요.",
-      same: "두 선택지가 같네요. 판결할 사건이 아닙니다.",
-      tooMany: "한 칸에 하나씩, 두 가지만 적어 주세요."
+      en: {
+        resultLines: [
+          "{c}. Case closed.",
+          "The court rules: {c}.",
+          "{c}. Don't look back.",
+          "{c}. Objection overruled.",
+          "{c}. The gavel has already fallen.",
+          "Verdict: {c}. No appeals.",
+          "{c}. Thinking longer only costs you.",
+          "{c} it is. Next case.",
+          "{c}. The court has spoken.",
+          "{c}. Final answer.",
+          "Ruling for {c}. Move on.",
+          "{c}. Stop deliberating.",
+          "{c}. Don't ask why.",
+          "{c}. I won't say it twice.",
+          "{c}. You were leaning this way anyway.",
+          "This court finds for {c}.",
+          "{c}. We're going with this.",
+          "{c}. More hesitation is a luxury.",
+          "Judgment is entered: {c}.",
+          "{c}. Clean and simple.",
+          "{c}. Go now.",
+          "If I must choose: {c}. No hesitation.",
+          "{c}. Today, it's this one.",
+          "{c}. No further questions.",
+          "{c}. Motion granted.",
+          "One ruling only: {c}.",
+          "{c}. I'll carry the doubt for you.",
+          "The answer is {c}. Hold the applause.",
+          "{c}. That's enough.",
+          "{c}. This ruling stands."
+        ],
+        likeLines: [
+          "Good. Carry on.",
+          "Excellent choice. Mine, technically.",
+          "Knew it. Now go.",
+          "Good. Bring me your next case.",
+          "Satisfied? Court is adjourned.",
+          "Right. The only regret is the time spent deciding."
+        ],
+        otherLine: "Then your answer was already decided. Go with {o}.",
+        notices: {
+          empty: "Enter one option in each field.",
+          single: "Fill in the other field too.",
+          same: "Both options are the same. No case to rule on.",
+          tooMany: "One option per field, two options in total."
+        },
+        safety: {
+          health: "Please talk to a professional about this decision.",
+          // 109는 한국, 988은 미국, 116 123은 영국·아일랜드 (2026-10 공식 출처로 확인).
+          selfHarm: "This isn't something I should decide for you. Please don't carry it alone. In Korea, call the suicide prevention line 109 (24/7). In the US, call or text 988. In the UK and Ireland, call Samaritans on 116 123. Elsewhere, please contact your local crisis line."
+        }
+      }
     };
 
-    var SAFETY_MESSAGES = {
-      health: "이 결정은 전문가와 상의하세요.",
-      selfHarm: "이건 제가 대신 고를 일이 아니에요. 혼자 견디지 말고 자살예방 상담전화 109에 전화해 이야기해 주세요. 24시간 열려 있습니다."
-    };
+    function copyFor(lang) {
+      return COPY[lang] || COPY[DEFAULT_LANG];
+    }
 
     // ─────────────────────────────────────────────
     // 난수
@@ -1031,10 +1137,44 @@
       return String(text || "").normalize("NFC").replace(/\s+/g, "").toLowerCase();
     }
 
+    // 소문자, 공백 하나로 정리, 둥근 따옴표(’)는 곧은 따옴표(')로. iOS 키보드는 둥근 따옴표를 넣는다.
+    function spaced(text) {
+      return String(text || "")
+        .normalize("NFC")
+        .toLowerCase()
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/\s+/g, " ");
+    }
+
+    function isAscii(text) {
+      return /^[\x00-\x7f]*$/.test(text);
+    }
+
+    // keyword가 영문·숫자 바로 뒤가 아닌 곳(단어 시작)에서 나오는지 본다.
+    function containsAtWordStart(text, keyword) {
+      var from = 0;
+      var at = text.indexOf(keyword, from);
+
+      while (at !== -1) {
+        var before = at === 0 ? "" : text.charAt(at - 1);
+        if (!/[a-z0-9]/.test(before)) {
+          return true;
+        }
+        from = at + 1;
+        at = text.indexOf(keyword, from);
+      }
+      return false;
+    }
+
     function containsAny(text, keywords) {
-      var target = compact(text);
+      var compactText = compact(text);
+      var spacedText = spaced(text);
+
       return keywords.some(function (keyword) {
-        return target.indexOf(compact(keyword)) !== -1;
+        if (isAscii(keyword)) {
+          return containsAtWordStart(spacedText, spaced(keyword));
+        }
+        return compactText.indexOf(compact(keyword)) !== -1;
       });
     }
 
@@ -1055,16 +1195,18 @@
     // 필터 → 파싱 → 추첨 순서. 필터에 걸리면 randomInt를 부르지 않는다.
     // ─────────────────────────────────────────────
 
-    function decideParsed(safetyText, parsed, randomInt) {
+    // lang은 안내 문구의 언어만 정한다. 추첨에는 아무 영향이 없다.
+    function decideParsed(safetyText, parsed, randomInt, lang) {
       var draw = randomInt || cryptoRandomInt;
+      var copy = copyFor(lang);
 
       var safety = checkSafety(safetyText);
       if (safety) {
-        return { status: "safety", kind: safety, message: SAFETY_MESSAGES[safety] };
+        return { status: "safety", kind: safety, message: copy.safety[safety] };
       }
 
       if (!parsed.ok) {
-        return { status: "invalid", reason: parsed.reason, message: NOTICES[parsed.reason] };
+        return { status: "invalid", reason: parsed.reason, message: copy.notices[parsed.reason] };
       }
 
       var index = draw(2);
@@ -1079,15 +1221,15 @@
     }
 
     // 한 줄 입력: "짜장 vs 짬뽕"
-    function decide(input, randomInt) {
-      return decideParsed(input, parseChoices(input), randomInt);
+    function decide(input, randomInt, lang) {
+      return decideParsed(input, parseChoices(input), randomInt, lang);
     }
 
     // 두 칸 입력: 화면이 쓰는 방식
-    function decidePair(first, second, randomInt) {
+    function decidePair(first, second, randomInt, lang) {
       // 공백으로 이으면 필터가 공백을 지운 뒤 칸 경계를 넘어 오탐한다 ("예약" + "먹방" → "약먹").
       var safetyText = String(first || "") + " / " + String(second || "");
-      return decideParsed(safetyText, parsePair(first, second), randomInt);
+      return decideParsed(safetyText, parsePair(first, second), randomInt, lang);
     }
 
     // ─────────────────────────────────────────────
@@ -1165,11 +1307,9 @@
     return {
       SELF_HARM_KEYWORDS: SELF_HARM_KEYWORDS,
       HEALTH_KEYWORDS: HEALTH_KEYWORDS,
-      RESULT_LINES: RESULT_LINES,
-      LIKE_LINES: LIKE_LINES,
-      OTHER_LINE: OTHER_LINE,
-      NOTICES: NOTICES,
-      SAFETY_MESSAGES: SAFETY_MESSAGES,
+      DEFAULT_LANG: DEFAULT_LANG,
+      COPY: COPY,
+      copyFor: copyFor,
       cryptoRandomInt: cryptoRandomInt,
       parseChoices: parseChoices,
       parsePair: parsePair,
@@ -1336,7 +1476,7 @@
     }
 
     function reveal(decision) {
-      var lines = PickCore.RESULT_LINES;
+      var lines = PickCore.copyFor("ko").resultLines;
       var lineIndex;
 
       try {
@@ -1394,7 +1534,7 @@
     });
 
     reactLike.addEventListener("click", function () {
-      var lines = PickCore.LIKE_LINES;
+      var lines = PickCore.copyFor("ko").likeLines;
       var index;
 
       try {
@@ -1412,7 +1552,7 @@
       if (!state.lastDecision) {
         return;
       }
-      showReply(PickCore.fillTemplate(PickCore.OTHER_LINE, state.lastDecision));
+      showReply(PickCore.fillTemplate(PickCore.copyFor("ko").otherLine, state.lastDecision));
     });
 
     againSame.addEventListener("click", function () {

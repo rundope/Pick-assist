@@ -30,7 +30,14 @@ const HEALTH_INPUTS = [
   "라식 vs 라섹",
   "치과 가기 vs 참기",
   "보톡스 vs 필러",
-  "정신과 약 끊기 vs 계속"
+  "정신과 약 끊기 vs 계속",
+  "take my pills vs skip",
+  "stop treatment vs keep going",
+  "surgery or wait",
+  "go to the hospital vs rest",
+  "lasik vs glasses",
+  "drive drunk vs taxi",
+  "take medicine vs sleep it off"
 ];
 
 const SELF_HARM_INPUTS = [
@@ -47,7 +54,12 @@ const SELF_HARM_INPUTS = [
   "목을 맬까",
   "약 모아서 한꺼번에 먹기",
   "과다복용 vs 참기",
-  "뛰어내리기 vs 버티기"
+  "뛰어내리기 vs 버티기",
+  "I want to end my life",
+  "kill myself vs keep going",
+  "cut myself or not",
+  "I don’t want to live",
+  "overdose vs wait"
 ];
 
 const EVERYDAY_INPUTS = [
@@ -66,7 +78,13 @@ const EVERYDAY_INPUTS = [
   "손목시계 vs 스마트워치",
   "숙제 끝내버릴까 vs 내일 하기",
   "운전 연수 vs 대중교통",
-  "약과 vs 쿠키"
+  "약과 vs 쿠키",
+  "Mercedes-Benz vs BMW",
+  "spend my life savings vs invest",
+  "medicine ball vs dumbbell",
+  "hospitality job vs office job",
+  "pillow vs blanket",
+  "cutting board vs plate"
 ];
 
 test("건강·안전 표현이 있으면 추첨하지 않고 전문가 안내를 낸다", () => {
