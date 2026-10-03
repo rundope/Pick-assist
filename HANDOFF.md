@@ -5,9 +5,9 @@
 ## 현재 상태 (마지막 갱신: 2026-10-03)
 
 - 앱은 GitHub Pages에 배포되어 있다: https://rundope.github.io/Pick-assist/
-- Pull Request(PR) 1번(MVP)과 2번(공유 미리보기)은 merge되었다 (`main` = `678a1d4`). 두 번 모두 Pages 배포가 성공했다.
+- Pull Request(PR) 1번(MVP), 2번(공유 미리보기), 3번(영어 버전)은 merge되었다 (`main` = `a77474f`). 세 번 모두 Pages 배포가 성공했다.
 - merge된 Pull Request(PR)는 다시 쓰지 않는다. 새 작업은 최신 `main`에서 branch를 새로 시작해 새 Pull Request(PR)로 올린다.
-- 작업 branch `claude/clever-maxwell-tgq5la`의 Pull Request(PR) 3번(https://github.com/rundope/Pick-assist/pull/3)에 퇴근 정리와 영어 버전이 함께 올라가 있다. merge 전이다.
+- merge 규칙이 바뀌었다: 기본은 사용자가 merge하고, 사용자가 특정 Pull Request(PR)의 merge를 명시적으로 요청하면 Claude가 CLAUDE.md의 확인 절차(충돌 없음·head 일치·테스트 통과·merge commit·Pages 배포 확인)를 거쳐 merge한다. Pull Request(PR) 3번은 이 방식으로 Claude가 merge했다.
 - 테스트는 54개이고 모두 통과한다 (`node --test tests/*.test.js`).
 - 화면은 한국어·영어 두 언어다. `?lang=ko|en` → 브라우저 첫 번째 언어 순으로 정하고, 오른쪽 위 버튼으로 바꾼다. 영어 슬로건은 "Don't hesitate" / "Leave the verdict to Pick-assist; the choice is still yours.", 버튼은 "Pick for me"다. 규칙은 CLAUDE.md의 "두 언어" 절에 있다.
 - 회사 이름은 Spoonbills다. 첫 화면 제목(슬로건)은 "망설이지 마세요 - 판결은 Pick-assist 에게, 선택은 자유", 그 아래 "두 선택지를 올리면, 공정하게 판결합니다."(사용자가 유지하기로 함)다.
@@ -17,6 +17,7 @@
 
 ### 2026-10-03에 한 일
 
+- 사용자 요청으로 Pull Request(PR) 3번을 Claude가 merge했고, 이에 맞춰 CLAUDE.md와 `wrap-up` 스킬의 merge 규칙을 고쳤다.
 - 영어 버전을 넣었다. 결과 문구 30개·반응 6개·안내·안전 문구를 영어로 쓰고, 문구를 `PickCore.COPY.ko/en`, 화면 글자를 `STRINGS.ko/en`으로 나눴다.
 - 영어 건강·안전 키워드를 추가했다. 영어 키워드는 단어 시작 위치에서만 맞춘다 ("spend my life" ≠ "end my life", "medicine ball", "hospitality"는 걸리지 않음).
 - 영어 자해 안내는 109(한국)와 함께 988(미국), 116 123(영국·아일랜드 Samaritans)을 알려 주고 전화 버튼 세 개를 보여준다. 세 번호는 2026-10-03에 공식 출처로 확인했다.
@@ -31,7 +32,7 @@
 
 ### 다음에 할 일 (우선순위 순)
 
-1. Pull Request(PR) 3번이 merge되면 https://rundope.github.io/Pick-assist/?lang=en 에서 영어 화면을 확인한다.
+1. https://rundope.github.io/Pick-assist/?lang=en 에서 영어 화면을 확인한다 (배포 완료).
 2. 공유 미리보기를 확인한다. https://rundope.github.io/Pick-assist/docs/og-image.png 가 열리는지 보고, 카카오 개발자 사이트의 도구 → 공유 디버거에서 `https://rundope.github.io/Pick-assist/` 캐시를 초기화한 뒤 카카오톡 카드를 확인한다 (merge 전에 붙인 링크가 이미지 없는 카드로 캐시되어 있을 수 있다).
 3. 실제 iPhone Safari와 iPad에서 두 언어를 모두 확인한다. iOS에는 한글 명조 폰트가 기본으로 없어서 제목이 고딕으로 보일 수 있다. 명조가 꼭 필요하면 폰트 파일을 저장소에 직접 넣는 방법을 검토한다 (외부 폰트 CDN은 원칙상 쓰지 않는다).
 
